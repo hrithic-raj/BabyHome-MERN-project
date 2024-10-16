@@ -5,13 +5,13 @@ import Login from './pages/Auth/Login';
 import Home from './pages/home/Home';
 // import MyNavbar from './components/MyNavbar';
 // import MyFooter from './components/MyFooter';
-import Product from './pages/Stores/Product';
-import Store from './pages/Stores/Store';
+import Product from './pages/StorePages/Product'
+import Store from './pages/StorePages/Store';
 import Profile from './pages/profile/Profile';
 import About from './pages/other/About';
 import ContactUs from './pages/other/ContactUs';
-import Cart from './pages/Stores/Cart';
-import Payment from './pages/Stores/Payment';
+import Cart from './pages/StorePages/Cart';
+import Payment from './pages/StorePages/Payment';
 import Orders from './pages/profile/Orders';
 import Wishlist from './pages/profile/Wishlist';
 import Donation from './pages/other/Donation';

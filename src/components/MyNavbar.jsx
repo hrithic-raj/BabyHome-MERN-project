@@ -12,7 +12,7 @@ function MyNavbar(props) {
     const [searchTerm, setSearchTerm] = useState("");
     const [products, setProducts] = useState([]);
     const [showModal, setShowModal] = useState(false);
-    const [cart, setCart] = useState(false);
+    const [cart, setCart] = useState([]);
     const navigate=useNavigate()
     const userId=localStorage.getItem('userId')
     const cartAddAlert=props.cartAddAlert

@@ -1,9 +1,15 @@
 import axios from "axios";
 
-const USERURL="http://localhost:5000/users"
-const PRODUCTURL="http://localhost:5000/products";
-const ORDERSURL="http://localhost:5000/totalorders"
+const USERURL = "http://localhost:5000/users";
+const PRODUCTURL = "http://localhost:5000/products";
+const ORDERSURL = "http://localhost:5000/totalorders";
+const ADMINURL = "http://localhost:5000/Admins";
 
+//admins
+export const checkAdmin = async (username,password)=>{
+    const res = await axios.get(`${ADMINURL}?username=${username}&password=${password}`)
+    return res.data;
+}
 
 //users
 export const getAllUsers=()=>{

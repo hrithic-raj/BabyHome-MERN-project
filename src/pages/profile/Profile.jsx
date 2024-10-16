@@ -22,12 +22,14 @@ function Profile() {
         district :''
     });
     useEffect(()=>{
-        getUserById(userId)
-        .then(res=>setUser(res.data))
-        .catch(err=>console.error(err))
-        getAddressById(userId)
-        .then(res=>setAddress(res))
-        .catch(err=>console.error(err))
+        if(userId){
+            getUserById(userId)
+            .then(res=>setUser(res.data))
+            .catch(err=>console.error(err))
+            getAddressById(userId)
+            .then(res=>setAddress(res))
+            .catch(err=>console.error(err))
+        }
     },[])
 
     const handleLogout=()=>{

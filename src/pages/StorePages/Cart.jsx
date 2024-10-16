@@ -23,15 +23,17 @@ function Cart() {
         setOldTotal(cart.reduce((acc,value)=>acc+value.oldtotalprice,0))
     })
     useEffect(()=>{
-        getCartById(userId)
-        .then(res=>setCart(res))
-        .catch(err=>console.error(err))
-        getUserById(userId)
-        .then(res=>setUser(res.data))
-        .catch(err=>console.error(err))
-        getAddressById(userId)
-        .then(res=>setAddress(res))
-        .catch(err=>console.error(err))
+        if(userId){
+            getCartById(userId)
+            .then(res=>setCart(res))
+            .catch(err=>console.error(err))
+            getUserById(userId)
+            .then(res=>setUser(res.data))
+            .catch(err=>console.error(err))
+            getAddressById(userId)
+            .then(res=>setAddress(res))
+            .catch(err=>console.error(err))
+        }
     },[userId])
     
     const removeFromCart=(productId)=>{
@@ -99,7 +101,7 @@ function Cart() {
                     <div className=' h-[430px] overflow-auto custom-scrollbar'>
                     {cart.length>0?(
                         cart.map(item=>(
-                            <>
+                        
                             <div key={item.id} className='flex flex-wrap mt-3 ms-2 mb-1'>
                             <div className='w-[200px] flex flex-col justify-center items-center mt-3 mb-3'>
                                 <img 
@@ -143,7 +145,7 @@ function Cart() {
                             </div>
                             
                         </div>
-                        </>
+                        
                         ))
                     ):(
                         <div className='flex relative justify-center'>

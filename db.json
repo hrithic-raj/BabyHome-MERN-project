@@ -1,4 +1,33 @@
 {
+  "Admins":[
+    {
+      "id": "1",
+      "name": "admin1",
+      "username": "@admin",
+      "email": "muhsin@gmail.com",
+      "password": "@admin",
+      "block": false,
+      "mainAdmin":true
+    },
+    {
+      "id": "2",
+      "name": "admin1",
+      "username": "admin1",
+      "email": "muhsin@gmail.com",
+      "password": "admin1",
+      "block": false,
+      "mainAdmin": false
+    },
+    {
+      "id": "3",
+      "name": "admin2",
+      "username": "admin2",
+      "email": "muhsin@gmail.com",
+      "password": "admin2",
+      "block": false,
+      "mainAdmin": false
+    }
+  ],
   "users": [
     {
       "id": "346d",
@@ -7,6 +36,7 @@
       "email": "muhsin@gmail.com",
       "password": "muhsin",
       "block": false,
+      "isAdmin": false,
       "cart": [
         {
           "id": "1006",
@@ -54,6 +84,51 @@
           "count": 2,
           "totalprice": 2400,
           "oldtotalprice": 2600
+        },
+        {
+          "id": "1002",
+          "name": "Organic Baby Shampoo",
+          "description": "A gentle, tear-free shampoo specially formulated for your baby’s delicate skin and hair. Made with organic ingredients and free from harmful chemicals.",
+          "category": "bathing",
+          "image": "https://f.media-amazon.com/images/I/71I5PeongNL._SX679_.jpg",
+          "images": [
+            "https://f.media-amazon.com/images/I/71I5PeongNL._SX679_.jpg",
+            "https://f.media-amazon.com/images/I/616TF7kFyEL._SX679_.jpg",
+            "https://f.media-amazon.com/images/I/71YkIf9bKZL._SX679_.jpg",
+            "https://f.media-amazon.com/images/I/71f15wupisL._SX679_.jpg"
+          ],
+          "price": 250,
+          "oldprice": 300,
+          "bestseller": true,
+          "newlyadded": true,
+          "stock": 0,
+          "rating": 4.6,
+          "count": 1,
+          "totalprice": 250,
+          "oldtotalprice": 300
+        },
+        {
+          "id": "1003",
+          "name": "Baby Milk Formula",
+          "description": "Nutritious and easily digestible baby formula for newborns. Provides all the essential vitamins and nutrients for healthy growth.",
+          "category": "foods",
+          "image": "https://f.media-amazon.com/images/I/71fEtlVkElL._SX679_.jpg",
+          "images": [
+            "https://f.media-amazon.com/images/I/71fEtlVkElL._SX679_.jpg",
+            "https://f.media-amazon.com/images/I/91I60vtKUOL._SX679_.jpg",
+            "https://f.media-amazon.com/images/I/813OHp65eaL._SY879_.jpg",
+            "https://f.media-amazon.com/images/I/81erqBm97rL._SY879_.jpg",
+            "https://f.media-amazon.com/images/I/81Es7q252HL._SX679_.jpg"
+          ],
+          "price": 450,
+          "oldprice": 500,
+          "bestseller": true,
+          "newlyadded": false,
+          "stock": 40,
+          "rating": 4.9,
+          "count": 2,
+          "totalprice": 900,
+          "oldtotalprice": 1000
         }
       ],
       "orders": [
@@ -189,6 +264,7 @@
       "email": "hrjpunda@gmail.com",
       "password": "zcpunda",
       "block": false,
+      "isAdmin": false,
       "cart": [
         {
           "id": "1012",
@@ -386,6 +462,7 @@
       "email": "hrj@gmail.com",
       "password": "hrithic",
       "block": false,
+      "isAdmin": false,
       "cart": [],
       "orders": [
         {
@@ -849,7 +926,7 @@
   ],
   "totalorders": [
     {
-      "totalprice": 17157,
+      "totalprice": 21277,
       "id": "500"
     },
     {
@@ -1159,7 +1236,7 @@
       "orderprice": 707
     },
     {
-      "id": 1728017889965,
+      "id": "1728017889965",
       "user": "hrithic",
       "item": [
         {
@@ -1217,6 +1294,63 @@
         "day": "Fri Oct 04 2024"
       },
       "orderprice": 7820
+    },
+    {
+      "id": 1729068825092,
+      "user": "aergarg",
+      "item": [
+        {
+          "id": "1004",
+          "name": "Disposable Baby Diapers (Pack of 40)",
+          "description": "High-absorbency disposable diapers with a soft inner lining to keep your baby dry and comfortable all day long.",
+          "category": "diapers",
+          "image": "https://f.media-amazon.com/images/I/615iChEayrL._SX679_PIbundle-40,TopRight,0,0_SX679SY457SH20_.jpg",
+          "images": [
+            "https://f.media-amazon.com/images/I/615iChEayrL._SX679_PIbundle-40,TopRight,0,0_SX679SY457SH20_.jpg",
+            "https://f.media-amazon.com/images/I/41dwinxigyL._SX569_.jpg",
+            "https://f.media-amazon.com/images/I/51HOKSYf0WL._SX569_.jpg",
+            "https://f.media-amazon.com/images/I/61GS2bNUuUL._SX679_.jpg"
+          ],
+          "price": 500,
+          "oldprice": 550,
+          "bestseller": false,
+          "newlyadded": true,
+          "stock": 50,
+          "rating": 4.7,
+          "count": 1,
+          "totalprice": 500,
+          "oldtotalprice": 550
+        },
+        {
+          "id": "1007",
+          "name": "Baby Walker",
+          "description": "Adjustable baby walker with multi-directional wheels, helping your little one take their first steps confidently.",
+          "category": "toys",
+          "image": "https://f.media-amazon.com/images/I/61tQ7vCZM+L._SX569_.jpg",
+          "images": [
+            "https://f.media-amazon.com/images/I/61tQ7vCZM+L._SX569_.jpg",
+            "https://f.media-amazon.com/images/I/719Z9aUJo4L._SX569_.jpg",
+            "https://f.media-amazon.com/images/I/716RMAPSOVL._SX569_.jpg",
+            "https://f.media-amazon.com/images/I/71lf8l4i5AL._SX569_.jpg",
+            "https://f.media-amazon.com/images/I/71KrlpIUxnL._SX569_.jpg"
+          ],
+          "price": 1200,
+          "oldprice": 1300,
+          "bestseller": true,
+          "newlyadded": false,
+          "stock": 10,
+          "rating": 4.8,
+          "count": 3,
+          "totalprice": 3600,
+          "oldtotalprice": 3900
+        }
+      ],
+      "paymentMethod": "Card",
+      "date": {
+        "time": "2:23:45 PM",
+        "day": "Wed Oct 16 2024"
+      },
+      "orderprice": 4120
     }
   ],
   "newsletter": [
