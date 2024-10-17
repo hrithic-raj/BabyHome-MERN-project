@@ -15,14 +15,15 @@ export const signupUser = createAsyncThunk('auth/signupUser', async (userData, {
 
 export const loginUser = createAsyncThunk('auth/loginUser', async (loginData, {rejectWithValue})=>{
     const {username, password}=loginData;
-    const admin = await checkAdmin(username, password);
+    const [admin] = await checkAdmin(username, password);
+    
     if(admin){
         return {
             adminData : admin,
             isAdmin : true
         };
     }else{
-        const user = await checkUser(username, password);
+        const [user] = await checkUser(username, password);
         if(!user){
             return rejectWithValue('Invalid Username or Password')
         }else {
@@ -48,7 +49,7 @@ const AuthSlice = createSlice({
             state.user = null;
             state.admin = null;
             localStorage.removeItem('userId');
-            localStorage.removeItem('admin');
+            localStorage.removeItem('adminId');
         }
     },
     extraReducers: (builder)=>{

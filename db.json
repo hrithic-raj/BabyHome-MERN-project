@@ -1,5 +1,5 @@
 {
-  "Admins":[
+  "Admins": [
     {
       "id": "1",
       "name": "admin1",
@@ -7,7 +7,7 @@
       "email": "muhsin@gmail.com",
       "password": "@admin",
       "block": false,
-      "mainAdmin":true
+      "mainAdmin": true
     },
     {
       "id": "2",
@@ -37,100 +37,7 @@
       "password": "muhsin",
       "block": false,
       "isAdmin": false,
-      "cart": [
-        {
-          "id": "1006",
-          "name": "Hooded Baby Towel",
-          "description": "Soft and absorbent hooded towel made from 100% organic cotton, perfect for post-bath cuddles.",
-          "category": "bathing",
-          "image": "https://f.media-amazon.com/images/I/61xqUYWsvNL._SX569_.jpg",
-          "images": [
-            "https://f.media-amazon.com/images/I/61xqUYWsvNL._SX569_.jpg",
-            "https://f.media-amazon.com/images/I/71iEXzJBCOL._SX569_.jpg",
-            "https://f.media-amazon.com/images/I/712POiPR+OL._SX569_.jpg",
-            "https://f.media-amazon.com/images/I/71AiBOQdITL._SX569_.jpg",
-            "https://f.media-amazon.com/images/I/71mXqWvZ6vL._SX569_.jpg",
-            "https://f.media-amazon.com/images/I/515hrFQAIoL._SX569_.jpg"
-          ],
-          "price": 350,
-          "oldprice": 400,
-          "bestseller": false,
-          "newlyadded": true,
-          "stock": 20,
-          "rating": 4.9,
-          "count": 3,
-          "totalprice": 1050,
-          "oldtotalprice": 1200
-        },
-        {
-          "id": "1007",
-          "name": "Baby Walker",
-          "description": "Adjustable baby walker with multi-directional wheels, helping your little one take their first steps confidently.",
-          "category": "toys",
-          "image": "https://f.media-amazon.com/images/I/61tQ7vCZM+L._SX569_.jpg",
-          "images": [
-            "https://f.media-amazon.com/images/I/61tQ7vCZM+L._SX569_.jpg",
-            "https://f.media-amazon.com/images/I/719Z9aUJo4L._SX569_.jpg",
-            "https://f.media-amazon.com/images/I/716RMAPSOVL._SX569_.jpg",
-            "https://f.media-amazon.com/images/I/71lf8l4i5AL._SX569_.jpg",
-            "https://f.media-amazon.com/images/I/71KrlpIUxnL._SX569_.jpg"
-          ],
-          "price": 1200,
-          "oldprice": 1300,
-          "bestseller": true,
-          "newlyadded": false,
-          "stock": 10,
-          "rating": 4.8,
-          "count": 2,
-          "totalprice": 2400,
-          "oldtotalprice": 2600
-        },
-        {
-          "id": "1002",
-          "name": "Organic Baby Shampoo",
-          "description": "A gentle, tear-free shampoo specially formulated for your baby’s delicate skin and hair. Made with organic ingredients and free from harmful chemicals.",
-          "category": "bathing",
-          "image": "https://f.media-amazon.com/images/I/71I5PeongNL._SX679_.jpg",
-          "images": [
-            "https://f.media-amazon.com/images/I/71I5PeongNL._SX679_.jpg",
-            "https://f.media-amazon.com/images/I/616TF7kFyEL._SX679_.jpg",
-            "https://f.media-amazon.com/images/I/71YkIf9bKZL._SX679_.jpg",
-            "https://f.media-amazon.com/images/I/71f15wupisL._SX679_.jpg"
-          ],
-          "price": 250,
-          "oldprice": 300,
-          "bestseller": true,
-          "newlyadded": true,
-          "stock": 0,
-          "rating": 4.6,
-          "count": 1,
-          "totalprice": 250,
-          "oldtotalprice": 300
-        },
-        {
-          "id": "1003",
-          "name": "Baby Milk Formula",
-          "description": "Nutritious and easily digestible baby formula for newborns. Provides all the essential vitamins and nutrients for healthy growth.",
-          "category": "foods",
-          "image": "https://f.media-amazon.com/images/I/71fEtlVkElL._SX679_.jpg",
-          "images": [
-            "https://f.media-amazon.com/images/I/71fEtlVkElL._SX679_.jpg",
-            "https://f.media-amazon.com/images/I/91I60vtKUOL._SX679_.jpg",
-            "https://f.media-amazon.com/images/I/813OHp65eaL._SY879_.jpg",
-            "https://f.media-amazon.com/images/I/81erqBm97rL._SY879_.jpg",
-            "https://f.media-amazon.com/images/I/81Es7q252HL._SX679_.jpg"
-          ],
-          "price": 450,
-          "oldprice": 500,
-          "bestseller": true,
-          "newlyadded": false,
-          "stock": 40,
-          "rating": 4.9,
-          "count": 2,
-          "totalprice": 900,
-          "oldtotalprice": 1000
-        }
-      ],
+      "cart": [],
       "orders": [
         {
           "id": 1726906485440,
@@ -245,6 +152,39 @@
             "day": "Sat Sep 21 2024"
           },
           "orderprice": 1370
+        },
+        {
+          "id": 1729150523166,
+          "item": [
+            {
+              "id": "1002",
+              "name": "Organic Baby Shampoo",
+              "description": "A gentle, tear-free shampoo specially formulated for your baby’s delicate skin and hair. Made with organic ingredients and free from harmful chemicals.",
+              "category": "bathing",
+              "image": "https://f.media-amazon.com/images/I/71I5PeongNL._SX679_.jpg",
+              "images": [
+                "https://f.media-amazon.com/images/I/71I5PeongNL._SX679_.jpg",
+                "https://f.media-amazon.com/images/I/616TF7kFyEL._SX679_.jpg",
+                "https://f.media-amazon.com/images/I/71YkIf9bKZL._SX679_.jpg",
+                "https://f.media-amazon.com/images/I/71f15wupisL._SX679_.jpg"
+              ],
+              "price": 250,
+              "oldprice": 300,
+              "bestseller": true,
+              "newlyadded": true,
+              "stock": 0,
+              "rating": 4.6,
+              "count": 1,
+              "totalprice": 250,
+              "oldtotalprice": 300
+            }
+          ],
+          "paymentMethod": "Card",
+          "date": {
+            "time": "1:05:23 PM",
+            "day": "Thu Oct 17 2024"
+          },
+          "orderprice": 310
         }
       ],
       "wishlist": [],
@@ -926,7 +866,7 @@
   ],
   "totalorders": [
     {
-      "totalprice": 21277,
+      "totalprice": 21587,
       "id": "500"
     },
     {
@@ -1296,7 +1236,7 @@
       "orderprice": 7820
     },
     {
-      "id": 1729068825092,
+      "id": "1729068825092",
       "user": "aergarg",
       "item": [
         {
@@ -1351,6 +1291,40 @@
         "day": "Wed Oct 16 2024"
       },
       "orderprice": 4120
+    },
+    {
+      "id": 1729150523181,
+      "user": "muhsin",
+      "item": [
+        {
+          "id": "1002",
+          "name": "Organic Baby Shampoo",
+          "description": "A gentle, tear-free shampoo specially formulated for your baby’s delicate skin and hair. Made with organic ingredients and free from harmful chemicals.",
+          "category": "bathing",
+          "image": "https://f.media-amazon.com/images/I/71I5PeongNL._SX679_.jpg",
+          "images": [
+            "https://f.media-amazon.com/images/I/71I5PeongNL._SX679_.jpg",
+            "https://f.media-amazon.com/images/I/616TF7kFyEL._SX679_.jpg",
+            "https://f.media-amazon.com/images/I/71YkIf9bKZL._SX679_.jpg",
+            "https://f.media-amazon.com/images/I/71f15wupisL._SX679_.jpg"
+          ],
+          "price": 250,
+          "oldprice": 300,
+          "bestseller": true,
+          "newlyadded": true,
+          "stock": 0,
+          "rating": 4.6,
+          "count": 1,
+          "totalprice": 250,
+          "oldtotalprice": 300
+        }
+      ],
+      "paymentMethod": "Card",
+      "date": {
+        "time": "1:05:23 PM",
+        "day": "Thu Oct 17 2024"
+      },
+      "orderprice": 310
     }
   ],
   "newsletter": [

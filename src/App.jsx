@@ -28,7 +28,9 @@ import ProductView from './pages/Admin/Products/ProductView';
 import UserView from './pages/Admin/Users/UserView';
 import AdminOrder from './pages/Admin/Orders/AdminOrder';
 import PageNotFound from './pages/other/PageNotFound';
-  
+import AdminRoute from './pages/Admin/Auth/AdminRoute';
+import UserRoute from './pages/Auth/UserRoute';
+
 function App() {
   return (
     <div className="App">
@@ -44,26 +46,28 @@ function App() {
           <Route path='/store/product/:productId' element={<Product/>}/>
         </Route>
         <Route path='/profile' element={<Profile/>}/>
-        <Route path='/cart' element={<Cart/>}/>
-        <Route path='/orders' element={<Orders/>}/>
+        <Route path='/cart' element={<UserRoute><Cart/></UserRoute>}/>
+        <Route path='/orders' element={<UserRoute><Orders/></UserRoute>}/>
         <Route path='/donation' element={<Donation/>}/>
         <Route path='/pp' element={<PrivacyPolicy/>}/>
         <Route path='/sr' element={<ShippingAndReturns/>}/>
         <Route path='/tc' element={<TermsAndConditions/>}/>
-        <Route path='/wishlist' element={<Wishlist/>}/>
-        <Route path='/payment' element={<Payment/>}/>
+        <Route path='/wishlist' element={<UserRoute><Wishlist/></UserRoute>}/>
+        <Route path='/payment' element={<UserRoute><Payment/></UserRoute>}/>
         <Route path='/store/:category' element={<Store/>}/>
+        
+        {/* admin  */}
         <Route path='/admin' >
-          <Route path='/admin' element={<Dashboard/>}/>
-          <Route path='/admin/products' element={<AdminProduct/>}/>
-          <Route path='/admin/users' element={<AdminUser/>}/>
-          <Route path='/admin/orders' element={<AdminOrder/>}/>
-          <Route path='/admin/users/adduser' element={<Adduser/>}/>
-          <Route path='/admin/products/addproduct' element={<AddProduct/>}/>
-          <Route path='/admin/products/:category' element={<AdminProduct/>}/>
-          <Route path='/admin/products/editproduct/:productId' element={<AdminProduct/>}/>
-          <Route path='/admin/products/product/:productId' element={<ProductView/>}/>
-          <Route path='/admin/users/user/:userId' element={<UserView/>}/>
+          <Route path='/admin' element={<AdminRoute><Dashboard/></AdminRoute>}/>
+          <Route path='/admin/products' element={<AdminRoute><AdminProduct/></AdminRoute>}/>
+          <Route path='/admin/users' element={<AdminRoute><AdminUser/></AdminRoute>}/>
+          <Route path='/admin/orders' element={<AdminRoute><AdminOrder/></AdminRoute>}/>
+          <Route path='/admin/users/adduser' element={<AdminRoute><Adduser/></AdminRoute>}/>
+          <Route path='/admin/products/addproduct' element={<AdminRoute><AddProduct/></AdminRoute>}/>
+          <Route path='/admin/products/:category' element={<AdminRoute><AdminProduct/></AdminRoute>}/>
+          <Route path='/admin/products/editproduct/:productId' element={<AdminRoute><AdminProduct/></AdminRoute>}/>
+          <Route path='/admin/products/product/:productId' element={<AdminRoute><ProductView/></AdminRoute>}/>
+          <Route path='/admin/users/user/:userId' element={<AdminRoute><UserView/></AdminRoute>}/>
         </Route>
         <Route path='*' element={<PageNotFound/>}/>
       </Routes>

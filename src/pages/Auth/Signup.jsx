@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { useNavigate, NavLink } from 'react-router-dom';
-import { addUser,checkUsername } from '../../Api/Login-api';
 import AuthNav from '../../components/AuthNav';
 import {useFormik} from 'formik';
 import * as yup from 'yup';

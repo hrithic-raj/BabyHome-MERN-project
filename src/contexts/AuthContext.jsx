@@ -9,9 +9,9 @@ export const AuthProvider = ({children})=>{
     const navigate=useNavigate();
     const [user,setUser]=useState([]);
     const [cart,setCart]=useState([]);
-    const URL="http://localhost:5000/users";
-    const userId=localStorage.getItem('userId');
-    const admin=localStorage.getItem('admin');
+    const URL = "http://localhost:5000/users";
+    const userId = localStorage.getItem('userId');
+    const adminId = localStorage.getItem('adminId');
     
     const login= async(username,password)=>{
         let isAdmin=false
@@ -58,8 +58,8 @@ export const AuthProvider = ({children})=>{
 
     const logout =()=>{
         // setUser(null);
-        if(admin){
-            localStorage.removeItem('admin');
+        if(adminId){
+            localStorage.removeItem('adminId');
             setTimeout(()=>{
                 navigate('/home')
             },1000)

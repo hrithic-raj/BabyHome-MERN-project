@@ -1,12 +1,9 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import { FaShoppingCart, FaUser, FaDonate, FaBars, FaTimes ,FaSearch} from 'react-icons/fa';
-import logo from '../Assets/logo.png'
-import {NavLink,useNavigate} from 'react-router-dom'
-import { AuthContext } from '../contexts/AuthContext';
-import { getUserById } from '../Api/Login-api';
-// import axios from 'axios';
-import { getCartById, getProducts } from '../Api/Product-api';
+import React, { useEffect, useState } from 'react';
+import { FaUser, FaSearch} from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom'
+import { getProducts } from '../Api/Product-api';
 import { getAllUsers } from '../Api/Admin-api';
+import { useSelector } from 'react-redux';
 
 function AdminNavbar(props) {
     const [isOpen, setIsOpen] = useState(false);
@@ -14,18 +11,10 @@ function AdminNavbar(props) {
     const [products, setProducts] = useState([]);
     const [users, setUsers] = useState([]);
     const [showModal, setShowModal] = useState(false);
-    const [cart, setCart] = useState(false);
     const navigate=useNavigate()
-    const {logout}=useContext(AuthContext);
-    const userId=localStorage.getItem('userId')
-    const admin=localStorage.getItem('admin')
-    const cartAddAlert=props.cartAddAlert
-    const cartRemoveAlert=props.cartRemoveAlert
-    const cartCount=props.cartCount
-    const paymentOptionAlert=props.paymentOptionAlert
-    const cartEmptyAlert=props.cartEmptyAlert
-    const orderPlacedAlert=props.orderPlacedAlert
-   
+    const adminId=localStorage.getItem('adminId')
+    const { admin } = useSelector((state)=>state.auth)
+
     useEffect(() => {
       const fetchResults = async () => {
         if (searchTerm.trim() === '') {
@@ -64,16 +53,6 @@ function AdminNavbar(props) {
   
       return () => clearTimeout(delaySearch);
     }, [searchTerm]);
-
-
-    useEffect(()=>{
-      if(userId){
-        getCartById(userId)
-        .then((res)=>{
-          setCart(res)
-        })
-      }
-    },[userId,cartAddAlert,cartRemoveAlert])
     
     const handleProductClick=(productId)=>{
       setShowModal(false);
@@ -83,12 +62,6 @@ function AdminNavbar(props) {
       setShowModal(false);
       navigate(`/admin/users/user/${userId}`)
     };
-
-    useEffect(()=>{
-      if(!admin){
-        navigate('/home')
-      }
-    },[admin])
   return (
    <>
   <div className='fixed top-0 w-full z-30 p-4 border-b border-gray-300' style={{backgroundColor :'#FFFFFF' ,height : "80px", width :"100%"}}>
@@ -138,6 +111,12 @@ function AdminNavbar(props) {
               </div>
             )}
           </div>
+        </div>
+        <div>
+          <button className="text-gray-600 hover:text-gray-400 flex gap-3" >
+            <FaUser size={24} />
+            <span >{admin && admin.name}</span>
+          </button>
         </div>
       </div>
     </nav>
