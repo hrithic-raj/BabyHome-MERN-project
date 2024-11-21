@@ -1,9 +1,9 @@
 import axios from "axios";
 
-const USERURL = "http://localhost:5000/users";
-const PRODUCTURL = "http://localhost:5000/products";
-const ORDERSURL = "http://localhost:5000/totalorders";
-const ADMINURL = "http://localhost:5000/Admins";
+const USERURL = "http://localhost:5001/users";
+const PRODUCTURL = "http://localhost:5001/products";
+const ORDERSURL = "http://localhost:5001/totalorders";
+const ADMINURL = "http://localhost:5001/Admins";
 
 //admins
 export const checkAdmin = async (username,password)=>{
@@ -42,7 +42,7 @@ export const editProduct=(id,updatedProduct)=>{
     return axios.patch(`${PRODUCTURL}/${id}`,updatedProduct)
 }
 
-//Cart
+//Orders
 export const getTotalOrders=async()=>{
     const res=await axios.get(ORDERSURL)
     return res.data;

@@ -1,21 +1,36 @@
 import axios from "axios"
-import { useState } from "react";
 
-const URL="http://localhost:5000/products";
-const userURL="http://localhost:5000/users"
-const ORDERSURL="http://localhost:5000/totalorders"
+
+const URL="http://localhost:5001/products";
+const userURL="http://localhost:5001/users"
+const ORDERSURL="http://localhost:5001/totalorders"
 
 
 export const getProducts=()=>{
     return axios.get(URL);
 }
 
+export const mongoGetProducts=()=>{
+    return axios.get('http://localhost:5000/store');
+}
+
 export const getProductById=(id)=>{
     return axios.get(`${URL}/${id}`);
 }
+
+export const mongoGetProductById=(id)=>{
+    return axios.get(`http://localhost:5000/store/${id}`);
+}
+
 export const getByCategory=(category)=>{
     return axios.get(`${URL}?category=${category}`)
 }
+
+export const mongoGetByCategory= async (category)=>{
+    const res = await axios.get(`http://localhost:5000/store?category=${category}`)
+    return res.data
+}
+
 export const getNewlyAdded=()=>{
     return axios.get(`${URL}?newlyadded=true`);
 }
@@ -24,6 +39,18 @@ export const getBestSeller=()=>{
     return axios.get(`${URL}?bestseller=true`);
 }
 
+export const mongoGetBestSeller = async ()=>{
+    const res = await axios.get(`http://localhost:5000/store/bestseller`);
+    return res.data;
+}
+
+export const mongoGetNewlyAdded = async ()=>{
+    const res = await axios.get(`http://localhost:5000/store/newlyadded`);
+    return res.data;
+}
+
+
+
 //Cart:-
 
 export const getCartById=async(id)=>{
@@ -31,7 +58,7 @@ export const getCartById=async(id)=>{
     return res.data.cart;
 }
 
-export const addToCart= async(userId,product,count)=>{
+export const addToCart = async(userId,product,count)=>{
     const currentCart= await getCartById(userId)
     const price=product.price
     const totalprice=product.price*count

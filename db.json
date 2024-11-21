@@ -2,7 +2,7 @@
   "Admins": [
     {
       "id": "1",
-      "name": "admin1",
+      "name": "@admin",
       "username": "@admin",
       "email": "muhsin@gmail.com",
       "password": "@admin",
@@ -474,6 +474,17 @@
         "district": "malappuram",
         "state": "kerala"
       }
+    },
+    {
+      "id": "1731997559609",
+      "name": "argargarg",
+      "username": "aergaergaerg",
+      "email": "argarga@gamil.com",
+      "password": "aergaerg",
+      "block": false,
+      "cart": [],
+      "orders": [],
+      "wishlist": []
     }
   ],
   "products": [
@@ -1293,7 +1304,7 @@
       "orderprice": 4120
     },
     {
-      "id": 1729150523181,
+      "id": "1729150523181",
       "user": "muhsin",
       "item": [
         {

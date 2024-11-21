@@ -19,7 +19,7 @@ function Signup() {
     const navigate=useNavigate()
     const dispatch = useDispatch()
     const { user, error } = useSelector((state)=>state.auth);
-    const userId=localStorage.getItem('userId')
+    const userId = localStorage.getItem('userId')
 
     const formik=useFormik({
       initialValues: {
@@ -37,15 +37,6 @@ function Signup() {
       onSubmit: (values)=>{
         dispatch(signupUser(values));
         console.log(values)
-        
-        // const isUsername= await checkUsername(values.username)
-        // if(!isUsername){
-        //   addUser(values)
-        //   navigate('/login')
-        // }
-        // else{
-        //   formik.setFieldError('Username already exists');
-        // }
       }
 
     })
@@ -54,7 +45,7 @@ function Signup() {
         navigate('/home')
       }
     },[user, userId])
-
+ 
   return (
     <div className='signup-main'>
       <AuthNav/>

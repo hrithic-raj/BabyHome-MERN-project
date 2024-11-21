@@ -1,6 +1,6 @@
 import React,{useState,useEffect} from 'react'
 import MyNavbar from '../../components/MyNavbar'
-import { addToCart, getProductById } from '../../Api/Product-api';
+import { addToCart, getProductById, mongoGetProductById } from '../../Api/Product-api';
 import { useNavigate, useParams } from 'react-router-dom';
 import MyFooter from '../../components/MyFooter';
 import { toast } from 'react-toastify';
@@ -16,11 +16,11 @@ function Product() {
   const [cartAddAlert,setCartAddAlert]=useState(false)
 
   useEffect(() => {
-    getProductById(productId)
+    mongoGetProductById(productId)
       .then(res => {
-        setProduct(res.data);
-        setSelectedImage(res.data.images[0]);
-        setSelectedImages(res.data.images)
+        setProduct(res.data.data);
+        setSelectedImage(res.data.data.images[0]);
+        setSelectedImages(res.data.data.images)
       })
       .catch(err=> console.error('Error fetching product data', err));
   }, []);

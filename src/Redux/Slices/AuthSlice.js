@@ -2,6 +2,16 @@ import {createSlice, createAsyncThunk} from '@reduxjs/toolkit'
 import { addUser, checkUser, checkUsername } from '../../Api/Login-api'
 import { checkAdmin } from '../../Api/Admin-api';
 
+// export const signupUser = createAsyncThunk('auth/signupUser', async (userData, {rejectWithValue})=>{
+//     const {username}=userData;
+//     const isUsernameTaken = await checkUsername(username)
+//     if(isUsernameTaken){
+//         return rejectWithValue('Username already exists');
+//     }else{
+//         await addUser(userData);
+//         return userData;
+//     }
+// });
 export const signupUser = createAsyncThunk('auth/signupUser', async (userData, {rejectWithValue})=>{
     const {username}=userData;
     const isUsernameTaken = await checkUsername(username)

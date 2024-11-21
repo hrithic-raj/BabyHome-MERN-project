@@ -37,6 +37,7 @@ function Login() {
             navigate('/admin')
         }
       },[user,admin])
+    
   return (
     <div className='login-main'>
         <AuthNav/>

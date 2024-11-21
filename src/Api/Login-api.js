@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const URL="http://localhost:5000/users"
+const URL="http://localhost:5001/users"
 
 
 export const checkUsername= async (username)=>{
@@ -11,6 +11,11 @@ export const checkUsername= async (username)=>{
 
 export const addUser=async (user)=>{
     const res = await axios.post(URL,user)
+    return res.data
+}
+
+export const mongoAddUser=async (user)=>{
+    const res = await axios.post('http://localhost:5000/users/signup',user)
     return res.data
 }
 

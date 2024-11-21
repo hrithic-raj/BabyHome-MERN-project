@@ -30,11 +30,13 @@ import AdminOrder from './pages/Admin/Orders/AdminOrder';
 import PageNotFound from './pages/other/PageNotFound';
 import AdminRoute from './pages/Admin/Auth/AdminRoute';
 import UserRoute from './pages/Auth/UserRoute';
+import Test from './pages/test'
 
 function App() {
   return (
     <div className="App">
       <Routes>
+        <Route path='/test' element={<Test/>}/>
         <Route path='/signup' element={<Signup/>}/>
         <Route path='/login' element={<Login/>}/>
         <Route path='/home' element={<Home/>}/>
