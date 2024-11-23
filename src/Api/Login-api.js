@@ -1,6 +1,7 @@
 import axios from "axios";
+import axiosInstance from "./axiosInstance";
 
-const URL="http://localhost:5000/users"
+const URL="http://localhost:5001/users"
 
 
 export const checkUsername= async (username)=>{
@@ -8,11 +9,11 @@ export const checkUsername= async (username)=>{
     return res.data.length>0;
 }
 
-
 export const addUser=async (user)=>{
-    const res = await axios.post(URL,user)
-    return res.data
+    const res = await axios.post(URL,user);
+    return res.data;
 }
+
 
 export const checkUser= async (username,password)=>{
     const res = await axios.get(`${URL}?username=${username}&password=${password}`)
@@ -32,4 +33,15 @@ export const addAddress=async(id,newAddress)=>{
     const currentAdress= await getAddressById(id)
     const res = await axios.patch(`${URL}/${id}`,{address : newAddress})
     return res.data.address
+}
+
+//mongose
+export const mongoAddUser=async (user)=>{
+    const res = await axiosInstance.post('/users/auth/signup',user);
+    return res.data;
+}
+
+export const monogoCheckUser=async (user)=>{
+    const res = await axiosInstance.post('/users/auth/login',user);
+    return res.data;
 }

@@ -1,9 +1,10 @@
 import axios from "axios"
-import { useState } from "react";
+import axiosInstance, { authorization} from "./axiosInstance";
 
-const URL="http://localhost:5000/products";
-const userURL="http://localhost:5000/users"
-const ORDERSURL="http://localhost:5000/totalorders"
+
+const URL="http://localhost:5001/products";
+const userURL="http://localhost:5001/users"
+const ORDERSURL="http://localhost:5001/totalorders"
 
 
 export const getProducts=()=>{
@@ -13,9 +14,13 @@ export const getProducts=()=>{
 export const getProductById=(id)=>{
     return axios.get(`${URL}/${id}`);
 }
+
+
 export const getByCategory=(category)=>{
     return axios.get(`${URL}?category=${category}`)
 }
+
+
 export const getNewlyAdded=()=>{
     return axios.get(`${URL}?newlyadded=true`);
 }
@@ -24,6 +29,32 @@ export const getBestSeller=()=>{
     return axios.get(`${URL}?bestseller=true`);
 }
 
+//mongose
+export const mongoGetProducts=()=>{
+    return axiosInstance.get('/store');
+}
+
+export const mongoGetProductById=(id)=>{
+    return axiosInstance.get(`store/${id}`);
+}
+
+export const mongoGetByCategory= async (category)=>{
+    const res = await axiosInstance.get(`/store?category=${category}`)
+    return res.data
+}
+
+export const mongoGetBestSeller = async ()=>{
+    const res = await axiosInstance.get(`/store/bestseller`);
+    return res.data;
+}
+
+export const mongoGetNewlyAdded = async ()=>{
+    const res = await axiosInstance.get(`/store/newlyadded`);
+    return res.data;
+}
+
+
+
 //Cart:-
 
 export const getCartById=async(id)=>{
@@ -31,7 +62,7 @@ export const getCartById=async(id)=>{
     return res.data.cart;
 }
 
-export const addToCart= async(userId,product,count)=>{
+export const addToCart = async(userId,product,count)=>{
     const currentCart= await getCartById(userId)
     const price=product.price
     const totalprice=product.price*count
@@ -86,7 +117,16 @@ export const decreaseCount=async(userId,product)=>{
     return updatedCart;
 }
 
+//mongose cart
+
+export const monogoGetCartById = async()=>{
+    const res= await axiosInstance.get(`/cart`, authorization)
+    return res.data;
+}
+
 //order:-
+
+
 
 export const getOrderById=async(userId)=>{
     const res=await axios.get(`${userURL}/${userId}`)

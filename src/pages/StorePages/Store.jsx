@@ -1,7 +1,7 @@
 import React,{useState,useEffect} from 'react'
 import MyNavbar from '../../components/MyNavbar'
 import {useNavigate, useParams} from 'react-router-dom'
-import { getProducts ,getByCategory} from '../../Api/Product-api'
+import { getProducts ,getByCategory, mongoGetProducts, mongoGetByCategory} from '../../Api/Product-api'
 import MyFooter from '../../components/MyFooter'
 function Store() {
   const navigate= useNavigate()
@@ -11,14 +11,14 @@ function Store() {
   const admin =localStorage.getItem('admin')
   useEffect(() => {
       if(category){
-        getByCategory(category)
+        mongoGetByCategory(category)
         .then(res=>{
           setProducts(res.data)
         })
         .catch(err=>console.error("Error while fetching products", err))
       }else{
-        getProducts()
-        .then(res=>setProducts(res.data))
+        mongoGetProducts()
+        .then(res=>setProducts(res.data.data))
         .catch(err=>console.error("Error while fetching products", err))
       }
       
@@ -27,7 +27,6 @@ function Store() {
   if (!products) {
     return <div>Loading...</div>;
   }
-
   
   const handleProduct=(productId)=>{
       navigate(`/store/product/${productId}`)
@@ -50,7 +49,7 @@ function Store() {
           </div>
           <div className='flex justify-center flex-wrap mx-20 mt-10 gap-10'>
               {products.map(product=>(
-                <div key={product.id} className='w-[300px] h-[350px] flex flex-col items-center shadow-md border space-y-3 hover:cursor-pointer  hover:transform hover:scale-105  transition-all duration-500 ease-in-out' onClick={()=>handleProduct(product.id)}>
+                <div key={product._id} className='w-[300px] h-[350px] flex flex-col items-center shadow-md border space-y-3 hover:cursor-pointer  hover:transform hover:scale-105  transition-all duration-500 ease-in-out' onClick={()=>handleProduct(product._id)}>
                 <img className='w-[270px] h-[250px] mt-3' src={product.images[0]} alt="Product Image" />
                 <div className='flex flex-col'>
                 <span className='max-w-[270px]'>{product.name}</span>

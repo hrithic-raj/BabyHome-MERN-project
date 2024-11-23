@@ -12,7 +12,7 @@ function MyNavbar(props) {
     const [searchTerm, setSearchTerm] = useState("");
     const [products, setProducts] = useState([]);
     const [showModal, setShowModal] = useState(false);
-    const [cart, setCart] = useState(false);
+    const [cart, setCart] = useState([]);
     const navigate=useNavigate()
     const userId=localStorage.getItem('userId')
     const cartAddAlert=props.cartAddAlert
@@ -133,7 +133,7 @@ function MyNavbar(props) {
           <button className="text-gray-600 hover:text-gray-400" onClick={()=>navigate('/donation')}>
             <FaDonate size={24} />
           </button>
-          <button className="text-gray-600 hover:text-gray-400 relative h-10"  onClick={()=>(userId)?navigate('/cart'):navigate('/login')}>
+          <button className="text-gray-600 hover:text-gray-400 relative h-10"  onClick={()=>navigate('/cart')}>
           <FaShoppingCart size={24} />
           {cart.length>0?(
             <span className='absolute top-1 left-4 bg-yellow-300 rounded-lg h-5 w-5 text-sm text-center'>{cart.length}</span>

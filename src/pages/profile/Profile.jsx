@@ -5,13 +5,14 @@ import { addAddress, getAddressById, getUserById } from '../../Api/Login-api'
 import { AuthContext } from '../../contexts/AuthContext'
 import { useNavigate } from 'react-router-dom'
 import MyFooter from '../../components/MyFooter'
-
+import {useSelector, useDispatch} from 'react-redux'
+import { logout } from '../../Redux/Slices/AuthSlice'
 function Profile() {
     const navigate=useNavigate();
     const [profilePic,setProfilePic]=useState(dp)
     const userId=localStorage.getItem('userId')
     const [user,setUser]=useState([]);
-    const {logout}=useContext(AuthContext)
+    const dispatch = useDispatch()
     const [address,setAddress]=useState([]);
     const [addressFlag,setAddressFlag]=useState(false);
     const [NewAddress,setNewAddress]=useState({
@@ -22,16 +23,19 @@ function Profile() {
         district :''
     });
     useEffect(()=>{
-        getUserById(userId)
-        .then(res=>setUser(res.data))
-        .catch(err=>console.error(err))
-        getAddressById(userId)
-        .then(res=>setAddress(res))
-        .catch(err=>console.error(err))
+        if(userId){
+            getUserById(userId)
+            .then(res=>setUser(res.data))
+            .catch(err=>console.error(err))
+            getAddressById(userId)
+            .then(res=>setAddress(res))
+            .catch(err=>console.error(err))
+        }
     },[])
 
     const handleLogout=()=>{
-        logout()
+        dispatch(logout())
+        navigate('/home')
     }
     const handleChange=(e)=>{
         setNewAddress({...NewAddress, [e.target.name] : e.target.value});

@@ -12,7 +12,7 @@ import banner2 from '../../Assets/banner/banner2.png'
 import banner3 from '../../Assets/banner/banner3.png'
 import banner4 from '../../Assets/banner/banner4.png'
 import MyFooter from '../../components/MyFooter'
-import { getBestSeller, getNewlyAdded } from '../../Api/Product-api'
+import { getBestSeller, getNewlyAdded, mongoGetBestSeller, mongoGetNewlyAdded } from '../../Api/Product-api'
 function Home() {
   const navigate=useNavigate()
   const [imgIndex,setImgIndex]=useState(0);
@@ -47,11 +47,11 @@ function Home() {
   }
 
   useEffect(()=>{
-    getNewlyAdded()
+    mongoGetNewlyAdded()
     .then(res=>setNewlyAdded(res.data))
     .catch(err=>console.error(err))
 
-    getBestSeller()
+    mongoGetBestSeller()
     .then(res=>setBestSeller(res.data))
     .catch(err=>console.error(err))
   },[])

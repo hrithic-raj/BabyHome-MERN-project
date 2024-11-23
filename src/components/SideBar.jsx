@@ -1,5 +1,5 @@
-import { useContext, useState } from 'react';
-import { FaHome, FaUser, FaShoppingCart, FaTimes, FaSignOutAlt } from 'react-icons/fa'; // Example icons
+import { useState } from 'react';
+import { FaTimes} from 'react-icons/fa'; // Example icons
 import { GiHamburgerMenu } from 'react-icons/gi'; // Hamburger icon
 import logoS from '../Assets/logo-small.png'
 import logoB from '../Assets/title.png'
@@ -11,14 +11,15 @@ import signoutIcon from '../Assets/Main/signout.png'
 // import dArrow from '../../Assets/Main/downArrow.png'
 // import rArrow from '../../Assets/Main/rightArrow.png'
 import { useNavigate } from 'react-router-dom';
-import { AuthContext } from '../contexts/AuthContext';
+import { useDispatch } from 'react-redux';
+import { logout } from '../Redux/Slices/AuthSlice';
+
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [isProductsOpen, setIsProductsOpen]=useState(false)
   const navigate=useNavigate();
-  const {logout}=useContext(AuthContext);
-
+  const dispatch = useDispatch()
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
@@ -26,10 +27,15 @@ const Sidebar = () => {
   const toggleMobileSidebar = () => {
     setIsMobileOpen(!isMobileOpen);
   };
+
 //   const toggleProductsDropdown =()=>{
 //     setIsProductsOpen(!isProductsOpen);
 //   }
 
+    const handleLogout = ()=>{
+        dispatch(logout())
+        navigate('/home')
+    }
   return (
     <div className='fixed left-0 top-0 z-50'>
         <div className="flex ">
@@ -97,7 +103,7 @@ const Sidebar = () => {
                     
                 
                 </div>
-                    <div  onClick={()=>logout()} className="flex items-center mb-24 space-x-4 w-full p-2 hover:bg-slate-200 cursor-pointer">
+                    <div  onClick={handleLogout} className="flex items-center mb-24 space-x-4 w-full p-2 hover:bg-slate-200 cursor-pointer">
                         {/* <FaSignOutAlt className='ms-3  text-sky-600' size={24} /> */}
                         <img className='ms-2' src={signoutIcon} alt="" />
                         {isOpen && <span className=' text-sky-600'>SignOut</span>}
