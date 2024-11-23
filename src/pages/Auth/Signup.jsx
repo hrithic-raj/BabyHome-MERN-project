@@ -23,20 +23,14 @@ function Signup() {
 
     const formik=useFormik({
       initialValues: {
-                    id:Date.now().toString(),
                     name: '',
                     username: '',
                     email: '',
                     password: '',
-                    block:false,
-                    cart:[],
-                    orders:[],
-                    wishlist:[],
       },
       validationSchema,
       onSubmit: (values)=>{
         dispatch(signupUser(values));
-        console.log(values)
       }
 
     })
@@ -53,13 +47,13 @@ function Signup() {
             <div className='border w-[500px] mb-10 flex flex-col items-center justify-center space-y-2 p-5'>
                 <span className='text-3xl font-bold mb-10'>SIGN UP</span>
             <form className='login-form w-[500px] flex flex-col items-center space-y-4' onSubmit={formik.handleSubmit} >
+                {error && <div className="text-red-500">{error}</div>}
                 <label htmlFor="name" className='w-[300px] text-left'>Name</label>
                 <input  className='w-[300px] h-[37px] rounded ps-5 bg-blue-50 border-2 border-blue-200' name='name' type="text" value={formik.values.name} onChange={formik.handleChange} onBlur={formik.handleBlur} placeholder='Enter your Username'/>
                 {formik.touched.name && formik.errors.name && <div className="text-red-500">{formik.errors.name}</div>}
                 <label htmlFor="username" className='w-[300px] text text-left'>Username</label>
                 <input  className='w-[300px] h-[37px] rounded ps-5 bg-blue-50 border-2 border-blue-200' name='username' type="text" value={formik.values.username} onChange={formik.handleChange} onBlur={formik.handleBlur} placeholder='Enter your Username'/>
                 {formik.touched.username && formik.errors.username && <div className="text-red-500">{formik.errors.username}</div>}
-                {error && <div className="text-red-500">{error}</div>}
                 <label htmlFor="email" className='w-[300px] text text-left'>Email</label>
                 <input  className='w-[300px] h-[37px] rounded ps-5 bg-blue-50 border-2 border-blue-200' name='email' type="text" value={formik.values.email} onChange={formik.handleChange} onBlur={formik.handleBlur} placeholder='Enter your Username'/>
                 {formik.touched.email && formik.errors.email && <div className="text-red-500">{formik.errors.email}</div>}

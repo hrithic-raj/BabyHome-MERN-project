@@ -5,7 +5,7 @@ import { Navigate } from 'react-router-dom'
 
 function UserRoute({children}) {
 //   const { user } = useSelector((state)=>state.auth)
-    const user =localStorage.getItem('userId')
+    const user = localStorage.getItem('token')
     
     if(!user){
         return <Navigate to={'/login'} />

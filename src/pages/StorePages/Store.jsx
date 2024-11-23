@@ -27,8 +27,6 @@ function Store() {
   if (!products) {
     return <div>Loading...</div>;
   }
-
-  console.log(products);
   
   const handleProduct=(productId)=>{
       navigate(`/store/product/${productId}`)

@@ -1,4 +1,5 @@
 import axios from "axios"
+import axiosInstance, { authorization} from "./axiosInstance";
 
 
 const URL="http://localhost:5001/products";
@@ -10,26 +11,15 @@ export const getProducts=()=>{
     return axios.get(URL);
 }
 
-export const mongoGetProducts=()=>{
-    return axios.get('http://localhost:5000/store');
-}
-
 export const getProductById=(id)=>{
     return axios.get(`${URL}/${id}`);
 }
 
-export const mongoGetProductById=(id)=>{
-    return axios.get(`http://localhost:5000/store/${id}`);
-}
 
 export const getByCategory=(category)=>{
     return axios.get(`${URL}?category=${category}`)
 }
 
-export const mongoGetByCategory= async (category)=>{
-    const res = await axios.get(`http://localhost:5000/store?category=${category}`)
-    return res.data
-}
 
 export const getNewlyAdded=()=>{
     return axios.get(`${URL}?newlyadded=true`);
@@ -39,13 +29,27 @@ export const getBestSeller=()=>{
     return axios.get(`${URL}?bestseller=true`);
 }
 
+//mongose
+export const mongoGetProducts=()=>{
+    return axiosInstance.get('/store');
+}
+
+export const mongoGetProductById=(id)=>{
+    return axiosInstance.get(`store/${id}`);
+}
+
+export const mongoGetByCategory= async (category)=>{
+    const res = await axiosInstance.get(`/store?category=${category}`)
+    return res.data
+}
+
 export const mongoGetBestSeller = async ()=>{
-    const res = await axios.get(`http://localhost:5000/store/bestseller`);
+    const res = await axiosInstance.get(`/store/bestseller`);
     return res.data;
 }
 
 export const mongoGetNewlyAdded = async ()=>{
-    const res = await axios.get(`http://localhost:5000/store/newlyadded`);
+    const res = await axiosInstance.get(`/store/newlyadded`);
     return res.data;
 }
 
@@ -111,6 +115,13 @@ export const decreaseCount=async(userId,product)=>{
     // console.log(updatedCart)
     await axios.patch(`${userURL}/${userId}`,{cart: updatedCart});
     return updatedCart;
+}
+
+//mongose cart
+
+export const monogoGetCartById = async()=>{
+    const res= await axiosInstance.get(`/cart`, authorization)
+    return res.data;
 }
 
 //order:-

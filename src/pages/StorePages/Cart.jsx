@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import MyNavbar from '../../components/MyNavbar'
 import { AuthContext } from '../../contexts/AuthContext'
-import { getCartById, deleteCartById, increaseCount, decreaseCount} from '../../Api/Product-api'
+import { deleteCartById, increaseCount, decreaseCount, monogoGetCartById} from '../../Api/Product-api'
 import { useNavigate } from 'react-router-dom'
 import { getAddressById, getUserById } from '../../Api/Login-api'
 import MyFooter from '../../components/MyFooter'
@@ -24,7 +24,7 @@ function Cart() {
     })
     useEffect(()=>{
         if(userId){
-            getCartById(userId)
+            monogoGetCartById()
             .then(res=>setCart(res))
             .catch(err=>console.error(err))
             getUserById(userId)
