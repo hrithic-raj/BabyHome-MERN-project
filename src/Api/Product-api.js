@@ -120,13 +120,33 @@ export const decreaseCount=async(userId,product)=>{
 //mongose cart
 
 export const monogoGetCartById = async()=>{
-    const res= await axiosInstance.get(`/cart`, authorization)
+    const res= await axiosInstance.get('/cart', authorization)    
+    return res.data.data;
+}
+export const monogoAddToCart = async(productId,quantity)=>{
+    const res = await axiosInstance.post(`/cart/${productId}`,{quantity}, authorization);
     return res.data;
 }
 
+export const monogoDeleteCartItem = async(productId)=>{
+    const res = await axiosInstance.delete(`/cart/${productId}`, authorization);
+    return res.data.response;
+}
+
+export const monogoIncreaseCount = async(productId)=>{
+    let empty = "empty"
+    const res = await axiosInstance.patch(`/cart/increase/${productId}`, empty, authorization);
+    console.log(res.data.data);
+    return res.data.data;
+}
+export const monogoDecreaseCount = async(productId)=>{
+    let empty = "empty"
+    const res = await axiosInstance.patch(`/cart/decrease/${productId}`,empty, authorization);
+    console.log(res.data.data);
+    return res.data.data;
+}
+
 //order:-
-
-
 
 export const getOrderById=async(userId)=>{
     const res=await axios.get(`${userURL}/${userId}`)

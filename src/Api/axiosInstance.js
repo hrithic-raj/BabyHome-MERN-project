@@ -5,6 +5,10 @@ const axiosInstance = axios.create({
     withCredentials: true,
 });
 
-export const authorization = {headers: { 'authorization': token}}
+export const authorization = {
+    headers: {
+         'authorization': token
+        }
+    }
 
 export default axiosInstance;

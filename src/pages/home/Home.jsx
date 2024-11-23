@@ -139,7 +139,7 @@ function Home() {
               <div
                 key={product.id}
                 className="min-w-[23.7%] h-3/6 p-4  flex-shrink-0 text-center bg-white shadow-md rounded-lg hover:cursor-pointer"
-                onClick={()=>navigate(`/store/product/${product.id}`)}
+                onClick={()=>handleProduct(product._id)}
               >
                 <img
                   src={product.images[0]}
@@ -171,7 +171,7 @@ function Home() {
               <div
                 key={product.id}
                 className="min-w-[23.7%] h-3/6 p-4  flex-shrink-0 text-center bg-white shadow-md rounded-lg hover:cursor-pointer"
-                onClick={()=>handleProduct(product.id)}
+                onClick={()=>handleProduct(product._id)}
               >
                 <img
                   src={product.images[0]}

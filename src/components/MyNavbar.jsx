@@ -14,7 +14,7 @@ function MyNavbar(props) {
     const [showModal, setShowModal] = useState(false);
     const [cart, setCart] = useState([]);
     const navigate=useNavigate()
-    const userId=localStorage.getItem('userId')
+    const userId=localStorage.getItem('token')
     const cartAddAlert=props.cartAddAlert
     const cartRemoveAlert=props.cartRemoveAlert
     // const {cart}=useContext(AuthContext);
@@ -53,14 +53,14 @@ function MyNavbar(props) {
       return () => clearTimeout(delaySearch);
     },[searchTerm])
 
-    useEffect(()=>{
-      if(userId){
-        getCartById(userId)
-        .then((res)=>{
-          setCart(res)
-        })
-      }
-    },[userId,cartAddAlert,cartRemoveAlert])
+    // useEffect(()=>{
+    //   if(userId){
+    //     getCartById(userId)
+    //     .then((res)=>{
+    //       setCart(res)
+    //     })
+    //   }
+    // },[userId,cartAddAlert,cartRemoveAlert])
     
     const handleProductClick=(id)=>{
       setShowModal(false);

@@ -20,8 +20,6 @@ function Payment() {
     // const [cartEmptyAlert,setCartEmptyAlert]=useState(false)
     // const [paymentOptionAlert,setPaymentOptionAlert]=useState(false)
 
-
-
     useEffect(()=>{
         if((cart.reduce((acc,value)=>acc+value.totalprice,0))>499){
             setTotal(cart.reduce((acc,value)=>acc+value.totalprice,20))

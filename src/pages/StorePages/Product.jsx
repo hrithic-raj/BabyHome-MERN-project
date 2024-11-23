@@ -1,6 +1,6 @@
 import React,{useState,useEffect} from 'react'
 import MyNavbar from '../../components/MyNavbar'
-import { addToCart, getProductById, mongoGetProductById } from '../../Api/Product-api';
+import { addToCart, getProductById, mongoGetProductById, monogoAddToCart } from '../../Api/Product-api';
 import { useNavigate, useParams } from 'react-router-dom';
 import MyFooter from '../../components/MyFooter';
 import { toast } from 'react-toastify';
@@ -11,7 +11,7 @@ function Product() {
   const [selectedImages, setSelectedImages] = useState([]);
   const [quntity, setQuntity] = useState(1);
   const navigate=useNavigate();
-  const userId=localStorage.getItem('userId')
+  const userId=localStorage.getItem('token')
   const {productId}=useParams()
   const [cartAddAlert,setCartAddAlert]=useState(false)
 
@@ -30,7 +30,7 @@ function Product() {
 
   const handleCart=()=>{
     if(userId){
-      addToCart(userId,product,quntity)
+      monogoAddToCart(productId,quntity)
       .then(res=>{
         toast.success("Cart Updated",{position:'bottom-left'})
         setCartAddAlert(true)
