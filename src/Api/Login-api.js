@@ -1,5 +1,5 @@
 import axios from "axios";
-import axiosInstance from "./axiosInstance";
+import axiosInstance, { authorization } from "./axiosInstance";
 
 const URL="http://localhost:5001/users"
 
@@ -36,6 +36,12 @@ export const addAddress=async(id,newAddress)=>{
 }
 
 //mongose
+
+export const monogoGetUser=async ()=>{
+    const res = await axiosInstance.get('/users', authorization);
+    return res.data.response;
+}
+
 export const mongoAddUser=async (user)=>{
     const res = await axiosInstance.post('/users/auth/signup',user);
     return res.data;

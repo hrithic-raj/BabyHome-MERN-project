@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext} from 'react'
 import dp from '../../Assets/Main/profile.png'
 import MyNavbar from '../../components/MyNavbar'
-import { addAddress, getAddressById, getUserById } from '../../Api/Login-api'
+import { addAddress, getAddressById, getUserById, monogoGetUser } from '../../Api/Login-api'
 import { AuthContext } from '../../contexts/AuthContext'
 import { useNavigate } from 'react-router-dom'
 import MyFooter from '../../components/MyFooter'
@@ -10,7 +10,7 @@ import { logout } from '../../Redux/Slices/AuthSlice'
 function Profile() {
     const navigate=useNavigate();
     const [profilePic,setProfilePic]=useState(dp)
-    const userId=localStorage.getItem('userId')
+    const userId=localStorage.getItem('token')
     const [user,setUser]=useState([]);
     const dispatch = useDispatch()
     const [address,setAddress]=useState([]);
@@ -24,12 +24,12 @@ function Profile() {
     });
     useEffect(()=>{
         if(userId){
-            getUserById(userId)
-            .then(res=>setUser(res.data))
+            monogoGetUser()
+            .then(res=>setUser(res))
             .catch(err=>console.error(err))
-            getAddressById(userId)
-            .then(res=>setAddress(res))
-            .catch(err=>console.error(err))
+            // getAddressById(userId)
+            // .then(res=>setAddress(res))
+            // .catch(err=>console.error(err))
         }
     },[])
 
@@ -79,12 +79,18 @@ function Profile() {
                 
             </div>
             <div className='w-[800px] flex flex-col shadow-lg p-4 border'>
-                <label htmlFor="" className='text-2xl'>Name</label>
-                <input className='text-xl p-3' type="text" value={user.name||''} placeholder='Name' disabled/>
-                <label htmlFor="" className='text-2xl'>Username</label>   
-                <input className='text-xl p-3' type="text" value={user.username||''} placeholder='Username' disabled/>
-                <label htmlFor="" className='text-2xl'>Email</label>   
-                <input className='text-xl p-3' type="text" value={user.email||''} placeholder='Username' disabled/>
+                <div className='flex justify-evenly'>
+                    <label htmlFor="" className='text-2xl'>Name</label>
+                    <input className='text-xl p-3 bg-transparent' type="text" value={user.name||''} placeholder='Name' disabled/>
+                </div>
+                <div className='flex justify-evenly'>
+                    <label htmlFor="" className='text-2xl'>Username</label>   
+                    <input className='text-xl p-3 bg-transparent' type="text" value={user.username||''} placeholder='Username' disabled/>
+                </div>
+                <div className='flex justify-evenly'>
+                    <label htmlFor="" className='text-2xl'>Email</label>   
+                    <input className='text-xl p-3 bg-transparent' type="text" value={user.email||''} placeholder='Username' disabled/>
+                </div>
                 
                 {userId?(
                     (!address)?(
