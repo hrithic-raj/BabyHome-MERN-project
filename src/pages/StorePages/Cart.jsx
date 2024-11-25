@@ -3,7 +3,7 @@ import MyNavbar from '../../components/MyNavbar'
 import { AuthContext } from '../../contexts/AuthContext'
 import { deleteCartById, increaseCount, decreaseCount, monogoGetCartById, monogoDeleteCartItem, monogoIncreaseCount, monogoDecreaseCount} from '../../Api/Product-api'
 import { useNavigate } from 'react-router-dom'
-import { getAddressById, getUserById } from '../../Api/Login-api'
+import { getAddressById, getUserById, monogoGetPrimaryAddress, monogoGetUser } from '../../Api/Login-api'
 import MyFooter from '../../components/MyFooter'
 import { toast } from 'react-toastify'
 
@@ -20,14 +20,15 @@ function Cart() {
     const [cartRemoveAlert,setCartRemoveAlert]=useState(false);
     useEffect(()=>{
         if(userId){
+            monogoGetUser()
+            .then(res=>setUser(res))
+            .catch(err=>console.error(err))
             monogoGetCartById()
-            .then(res=>{
-                setCart(res)
-            })
+            .then(res=>setCart(res))
             .catch(err=>console.error(err.response.data))
-            // getAddressById(userId)
-            // .then(res=>setAddress(res))
-            // .catch(err=>console.error(err))
+            monogoGetPrimaryAddress()
+            .then(res=>setAddress(res))
+            .catch(err=>console.error(err))
         }
     },[])
     
@@ -57,7 +58,7 @@ function Cart() {
     }
 
     const handlePayment=()=>{
-        if(cart.length>0){
+        if(cart.products.length>0){
             navigate('/payment')
         }else{
             alert("Your Cart is empty")
@@ -76,11 +77,9 @@ function Cart() {
                             <div className='max-w-300px '>
                                 
                                 <span className='text-2xl font-semibold'>Deliver to : {user.name} </span>
-                                <span className='text-2xl max-w-[300px]'>{address.housename}, </span>
+                                <span className='text-2xl max-w-[300px]'>{address.street}, </span>
                                 <span className='text-2xl max-w-[300px]'>{address.city}, </span>
-                                <span className='text-2xl max-w-[300px]'>{address.landmark}, </span>
-                                <span className='text-2xl max-w-[300px]'>{address.district}, </span>
-                                <span className='text-2xl max-w-[300px]'>{address.state}, </span>
+                                <span className='text-2xl max-w-[300px]'>{address.phone}, </span>
                                 <span className='text-2xl max-w-[300px]'>-{address.pincode}</span>
                             </div>
                             <button className='bg-orange-400 rounded w-[100px] p-2 h-[50px] text-white' onClick={()=>navigate('/profile')}>Change</button>

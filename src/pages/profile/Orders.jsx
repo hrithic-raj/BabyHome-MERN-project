@@ -4,22 +4,18 @@ import MyNavbar from '../../components/MyNavbar'
 import { addAddress, getAddressById, getUserById } from '../../Api/Login-api'
 import { AuthContext } from '../../contexts/AuthContext'
 import { useNavigate } from 'react-router-dom'
-import { getOrderById } from '../../Api/Product-api'
+import { getOrderById, mongoGetOrderById } from '../../Api/Product-api'
 import MyFooter from '../../components/MyFooter'
 
 function Orders() {
     const navigate=useNavigate();
     const [profilePic,setProfilePic]=useState(dp)
-    const userId=localStorage.getItem('userId')
-    const [user,setUser]=useState([]);
+    const userId=localStorage.getItem('token')
     const [orders,setOrders]=useState([]);
     const [address,setAddress]=useState([]);
     const {logout}=useContext(AuthContext)
     useEffect(()=>{
-        getUserById(userId)
-        .then(res=>setUser(res.data))
-        .catch(err=>console.error(err))
-        getOrderById(userId)
+        mongoGetOrderById(userId)
         .then(res=>setOrders(res))
         .catch(err=>console.error(err))
         getAddressById(userId)

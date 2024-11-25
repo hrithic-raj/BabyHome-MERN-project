@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import MyNavbar from '../../components/MyNavbar'
-import { getCartById, deleteCartById, increaseCount, decreaseCount, ClearCart, addToOrder} from '../../Api/Product-api'
+import { getCartById, deleteCartById, increaseCount, decreaseCount, ClearCart, addToOrder, monogoGetCartById} from '../../Api/Product-api'
 import gpay from '../../Assets/Main/gpay.png'
 import paytm from '../../Assets/Main/paytm.png'
-import { getAddressById, getUserById } from '../../Api/Login-api'
+import { getAddressById, getUserById, monogoGetPrimaryAddress, monogoGetUser } from '../../Api/Login-api'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 
@@ -20,26 +20,36 @@ function Payment() {
     // const [cartEmptyAlert,setCartEmptyAlert]=useState(false)
     // const [paymentOptionAlert,setPaymentOptionAlert]=useState(false)
 
+    // useEffect(()=>{
+    //     if((cart.reduce((acc,value)=>acc+value.totalprice,0))>499){
+    //         setTotal(cart.reduce((acc,value)=>acc+value.totalprice,20))
+    //         setOldTotal(cart.reduce((acc,value)=>acc+value.oldtotalprice,0))
+    //     }
+    //     else{
+    //         setTotal(cart.reduce((acc,value)=>acc+value.totalprice,60))
+    //         setOldTotal(cart.reduce((acc,value)=>acc+value.oldtotalprice,0))
+    //     }
+    // },[cart])
     useEffect(()=>{
-        if((cart.reduce((acc,value)=>acc+value.totalprice,0))>499){
-            setTotal(cart.reduce((acc,value)=>acc+value.totalprice,20))
-            setOldTotal(cart.reduce((acc,value)=>acc+value.oldtotalprice,0))
-        }
-        else{
-            setTotal(cart.reduce((acc,value)=>acc+value.totalprice,60))
-            setOldTotal(cart.reduce((acc,value)=>acc+value.oldtotalprice,0))
-        }
-    },[cart])
-    useEffect(()=>{
-        getCartById(userId)
-        .then(res=>setCart(res))
-        .catch(err=>console.error(err))
-        getUserById(userId)
-        .then(res=>setUser(res.data))
-        .catch(err=>console.error(err))
-        getAddressById(userId)
-        .then(res=>setAddress(res))
-        .catch(err=>console.error(err))
+        // getCartById(userId)
+        // .then(res=>setCart(res))
+        // .catch(err=>console.error(err))
+        // getUserById(userId)
+        // .then(res=>setUser(res.data))
+        // .catch(err=>console.error(err))
+        // getAddressById(userId)
+        // .then(res=>setAddress(res))
+        // .catch(err=>console.error(err))
+
+        monogoGetUser()
+            .then(res=>setUser(res))
+            .catch(err=>console.error(err))
+        monogoGetCartById()
+            .then(res=>setCart(res))
+            .catch(err=>console.error(err.response.data))
+        monogoGetPrimaryAddress()
+            .then(res=>setAddress(res))
+            .catch(err=>console.error(err))
     },[userId])
     
     const removeFromCart=(productId)=>{

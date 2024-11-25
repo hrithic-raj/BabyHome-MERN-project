@@ -180,6 +180,13 @@ export const addToOrder = async(userId,ordersList,totalOrderList,total)=>{
     return res.data.orders;
 } 
 
+// mongose order
+
+export const mongoGetOrderById=async()=>{
+    const res=await axiosInstance.get(`/orders`,authorization)
+    console.log(res.data.data);
+    return res.data.data;
+}
 
 //newsletter
 

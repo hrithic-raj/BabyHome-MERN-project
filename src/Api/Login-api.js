@@ -72,6 +72,11 @@ export const monogoSetPrimaryAddress = async(addressId)=>{
     return res.data.data;
 }
 
+export const monogoGetPrimaryAddress = async()=>{
+    const res= await axiosInstance.get(`/address/primary`, authorization)
+    return res.data.data;
+}
+
 export const monogoDeleteAddress = async(addressId)=>{
     const res= await axiosInstance.delete(`/address/${addressId}`, authorization)
     return res.data.data;
