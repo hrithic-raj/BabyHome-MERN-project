@@ -136,13 +136,11 @@ export const monogoDeleteCartItem = async(productId)=>{
 export const monogoIncreaseCount = async(productId)=>{
     let empty = "empty"
     const res = await axiosInstance.patch(`/cart/increase/${productId}`, empty, authorization);
-    console.log(res.data.data);
     return res.data.data;
 }
 export const monogoDecreaseCount = async(productId)=>{
     let empty = "empty"
     const res = await axiosInstance.patch(`/cart/decrease/${productId}`,empty, authorization);
-    console.log(res.data.data);
     return res.data.data;
 }
 

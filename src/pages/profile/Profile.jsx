@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext} from 'react'
 import dp from '../../Assets/Main/profile.png'
 import MyNavbar from '../../components/MyNavbar'
-import { addAddress, getAddressById, getUserById, monogoGetUser } from '../../Api/Login-api'
+import { addAddress, getAddressById, getUserById, monogoAddAddress, monogoDeleteAddress, monogoGetAddresses, monogoGetUser, monogoSetPrimaryAddress, monogoUpdateAddress } from '../../Api/Login-api'
 import { AuthContext } from '../../contexts/AuthContext'
 import { useNavigate } from 'react-router-dom'
 import MyFooter from '../../components/MyFooter'
@@ -13,9 +13,10 @@ function Profile() {
     const userId=localStorage.getItem('token')
     const [user,setUser]=useState([]);
     const dispatch = useDispatch()
-    const [address,setAddress]=useState([]);
+    const [addresses ,setAddresses]=useState([]);
+    const [editId,setEditId]=useState(null);
     const [addressFlag,setAddressFlag]=useState(false);
-    const [NewAddress,setNewAddress]=useState({
+    const [newAddress,setNewAddress]=useState({
         pincode:'',
         housename:'',
         city:'',
@@ -27,9 +28,9 @@ function Profile() {
             monogoGetUser()
             .then(res=>setUser(res))
             .catch(err=>console.error(err))
-            // getAddressById(userId)
-            // .then(res=>setAddress(res))
-            // .catch(err=>console.error(err))
+            monogoGetAddresses()
+            .then(res=>setAddresses(res))
+            .catch(err=>console.error(err))
         }
     },[])
 
@@ -37,28 +38,52 @@ function Profile() {
         dispatch(logout())
         navigate('/home')
     }
-    const handleChange=(e)=>{
-        setNewAddress({...NewAddress, [e.target.name] : e.target.value});
+    const handleAddOrEdit =(e)=>{
+        e.preventDefault()
+        if(editId){
+            monogoUpdateAddress(editId, newAddress)
+            .then(res=>{
+                setAddresses(res.allAddress)
+                setNewAddress({
+                    street:'',
+                    city: '',
+                    state: '',
+                    pincode: '',
+                    country: '',
+                    phone: '',
+                });
+                setEditId(null)
+                setAddressFlag(false)
+            })
+            .catch(err=> console.error(err))
+        }else{
+            monogoAddAddress(newAddress)
+            .then(res=>{
+                setAddresses(res.allAddress)
+                setNewAddress({
+                    street:'',
+                    city: '',
+                    state: '',
+                    pincode: '',
+                    country: '',
+                    phone: '',
+                });
+                setAddressFlag(false)
+            })
+            .catch(err=> console.error(err))
+        }
+    }
+    const handleDelete =(addressId)=>{
+        monogoDeleteAddress(addressId)
+        .then(res=>setAddresses(res.allAddress))
+        .catch(err=> console.error(err))
+    }
+    const handleSetPrimary =(addressId)=>{
+        monogoSetPrimaryAddress(addressId)
+        .then(res=>setAddresses(res.allAddress))
+        .catch(err=> console.error(err))
     }
     
-    const handleSubmit=(e)=>{
-        e.preventDefault()
-        addAddress(userId,NewAddress)
-        .then(res=>{
-            setAddress(res)
-            setNewAddress({
-                pincode:'',
-                housename:'',
-                city:'',
-                landmark:'',
-                district :'',
-                state :'',
-            })
-            setAddressFlag(false)
-        })
-        .catch(err=>console.error(err))
-        
-    }
   return (
     <div>
         <MyNavbar/>
@@ -91,65 +116,131 @@ function Profile() {
                     <label htmlFor="" className='text-2xl'>Email</label>   
                     <input className='text-xl p-3 bg-transparent' type="text" value={user.email||''} placeholder='Username' disabled/>
                 </div>
-                
-                {userId?(
-                    (!address)?(
-                        (!addressFlag)?(
-                            <button className='bg-blue-400 rounded p-2' onClick={()=>setAddressFlag(true)}>Add Address</button>
-                        ):(
-                            <div className='flex flex-col border p-2 mt-2'>
-                                <span className='text-2xl text-center mb-2'>ADD NEW ADDRESS</span>
-                                <form onSubmit={handleSubmit} className='space-y-5 flex flex-col items-center'>
-                                    <div className='sm:space-x-3 space-x-0 flex flex-wrap justify-center'>
-                                        <input className='text-xl border p-2' name='pincode' onChange={handleChange} type="text"  placeholder='Pincode' />
-                                        <input className='text-xl border p-2' name='housename' onChange={handleChange} type="text"  placeholder='House Name'/>
-                                    </div>
-                                    <div className='sm:space-x-3 space-x-0 flex flex-wrap justify-center'>
-                                        <input className='text-xl border p-2' name='city' onChange={handleChange} type="text"  placeholder='city'/>
-                                        <input className='text-xl border p-2' name='landmark' onChange={handleChange} type="text"  placeholder='landmark'/>
-                                    </div>
-                                    <div className='sm:space-x-3 space-x-0 flex flex-wrap justify-center'>
-                                        <input className='text-xl border p-2' name='district' onChange={handleChange} type="text"  placeholder='district'/>
-                                        <input className='text-xl border p-2' name='state' onChange={handleChange} type="text"  placeholder='state'/>
-                                    </div>
-                                    <div className='sm:space-x-3 space-x-0 flex flex-wrap justify-center mb-10'>
-                                        <button type='submit' className='bg-blue-500 rounded-lg p-2 text-white'>SAVE</button>
-                                        <button className='bg-red-400 rounded-lg p-2 text-white' onClick={()=>setAddressFlag(false)}>CANCEL</button>
-                                    </div>
-                                </form>
-                            </div>
-                        )
-                        
+                <div className="mt-[10px] flex flex-wrap justify-center space-y-5">
+                <div className="w-[800px] flex flex-col shadow-lg p-4 border">
+                    <h2 className="text-2xl mb-4">Addresses</h2>
+                    <div className="h-[200px] overflow-auto custom-scrollbar">
+                    
+                        {addresses.length>0?(
+                            addresses.map((address) => (
+                                <div
+                                    key={address._id}
+                                    className={`mb-2 border p-4 ${
+                                        address.isSelected ? 'bg-green-100' : ''
+                                    }`}
+                                >
+                                    <p>
+                                        {address.street}, {address.city}, {address.state},{' '}
+                                        {address.country} - {address.pincode}
+                                    </p>
+                                    <p>Phone: {address.phone}</p>
+                                    <button
+                                        className="bg-yellow-400 rounded px-3 py-1 mr-2"
+                                        onClick={() => {
+                                            setEditId(address._id);
+                                            setNewAddress(address);
+                                            setAddressFlag(true);
+                                        }}
+                                    >
+                                        Edit
+                                    </button>
+                                    <button
+                                        className="bg-red-400 rounded px-3 py-1 mr-2"
+                                        onClick={() => handleDelete(address._id)}
+                                    >
+                                        Delete
+                                    </button>
+                                    <button
+                                        className="bg-blue-400 rounded px-3 py-1"
+                                        onClick={() => handleSetPrimary(address._id)}
+                                    >
+                                        {address.isSelected ? 'Primary' : 'Set as Primary'}
+                                    </button>
+                                </div>
+                            ))):(
+                                <div>
+                                    <img src="https://cdn-icons-png.flaticon.com/512/7102/7102979.png" alt="" className='w-56' />
+                                </div>
+                            )}
+                    </div>
+                    <div className='mt-4 w-[700px] flex flex-col items-center'>
+                    {addressFlag?(
+                        <form onSubmit={handleAddOrEdit} className="mt-4">
+                            <h3 className="text-xl">Add/Edit Address</h3>
+                            <input
+                                type="text"
+                                name="street"
+                                placeholder="Street"
+                                value={newAddress.street}
+                                onChange={(e) =>
+                                    setNewAddress({ ...newAddress, street: e.target.value })
+                                }
+                                className="border p-2 w-full mb-2"
+                            />
+                            <input
+                                type="text"
+                                name="city"
+                                placeholder="City"
+                                value={newAddress.city}
+                                onChange={(e) =>
+                                    setNewAddress({ ...newAddress, city: e.target.value })
+                                }
+                                className="border p-2 w-full mb-2"
+                            />
+                            <input
+                                type="text"
+                                name="state"
+                                placeholder="State"
+                                value={newAddress.state}
+                                onChange={(e) =>
+                                    setNewAddress({ ...newAddress, state: e.target.value })
+                                }
+                                className="border p-2 w-full mb-2"
+                            />
+                            <input
+                                type="number"
+                                name="pincode"
+                                placeholder="Pincode"
+                                value={newAddress.pincode}
+                                onChange={(e) =>
+                                    setNewAddress({ ...newAddress, pincode: e.target.value })
+                                }
+                                className="border p-2 w-full mb-2"
+                            />
+                            <input
+                                type="text"
+                                name="country"
+                                placeholder="Country"
+                                value={newAddress.country}
+                                onChange={(e) =>
+                                    setNewAddress({ ...newAddress, country: e.target.value })
+                                }
+                                className="border p-2 w-full mb-2"
+                            />
+                            <input
+                                type="number"
+                                name="phone"
+                                placeholder="Phone"
+                                value={newAddress.phone}
+                                onChange={(e) =>
+                                    setNewAddress({ ...newAddress, phone: e.target.value })
+                                }
+                                className="border p-2 w-full mb-2"
+                            />
+                            <button
+                                type="submit"
+                                className="bg-blue-500 rounded-lg px-4 py-2 text-white"
+                            >
+                                {editId ? 'Update Address' : 'Add Address'}
+                            </button>
+                        </form>
                     ):(
-                        <div className='border flex flex-col mt-3'>
-                                <span className='text-2xl text-center p-2'>ADDRESS</span>
-                                <div className='sm:space-x-3 space-x-0 flex flex-wrap mb-3 justify-center items-center'>
-                                    <label htmlFor="">Pincode</label>
-                                    <input className='text-xl bg-transparent p-2' name='pincode' value={address.pincode||''} type="text"  placeholder='Pincode' disabled/>
-                                    <label htmlFor="">house name</label>
-                                    <input className='text-xl bg-transparent p-2' name='housename' value={address.housename||''} type="text"  placeholder='House Name' disabled/>
-                                </div>
-                                <div className='sm:space-x-3 space-x-0 flex flex-wrap mb-3 justify-center items-center'>
-                                    <label htmlFor="">City</label>
-                                    <input className='text-xl bg-transparent p-2' name='city' value={address.city||''} type="text"  placeholder='city'disabled/>
-                                    <label htmlFor="">Lank mark</label>
-                                    <input className='text-xl bg-transparent p-2' name='landmark' value={address.landmark||''} type="text"  placeholder='landmark'disabled/>
-                                </div>
-                                <div className='sm:space-x-3 space-x-0 flex flex-wrap mb-3 justify-center items-center'>
-                                    <label htmlFor="">District</label>
-                                    <input className='text-xl bg-transparent p-2' name='district' value={address.district||""} type="text"  placeholder='district'disabled/>
-                                    <label htmlFor="">State</label>
-                                    <input className='text-xl bg-transparent p-2' name='state' value={address.state||''} type="text"  placeholder='state'disabled/>
-                                </div>
-                                <div className='sm:space-x-3 space-x-0 flex flex-wrap justify-center mb-10 mt-2'>
-                                    <button className='bg-blue-500 rounded-lg p-2 text-white' onClick={()=>{setAddressFlag(true);setAddress(null)}}>CHANGE</button>
-                                </div>
-                        </div>
-                    )
-                ):(
-                    null
-                )}
-                
+                    <button className='bg-blue-400 rounded p-2' onClick={()=>setAddressFlag(true)}>Add Address</button>
+
+                    )}
+                </div>
+                </div>
+            </div>
             </div>
             
         </div>

@@ -9,7 +9,6 @@ export const signupUser = createAsyncThunk('auth/signupUser', async (userData, {
     try{
         const res = await axios.post("http://localhost:5000/api/users/auth/signup", userData);
         const {user, token} = res.data.data
-        console.log(user, token);
         localStorage.setItem('token', token);
         localStorage.setItem('role', user.role);
 
@@ -24,7 +23,6 @@ export const signupUser = createAsyncThunk('auth/signupUser', async (userData, {
 
 export const loginUser = createAsyncThunk('auth/loginUser', async (loginData, {rejectWithValue})=>{
     try{
-        const {username, password}=loginData;
         const res = await monogoCheckUser(loginData);
         const {user, token} = res.data
         if(!user){
@@ -106,8 +104,7 @@ const AuthSlice = createSlice({
             }
         })
         .addCase(loginUser.rejected , (state, action)=>{
-            state.loading = false;
-            console.log(action.payload);        
+            state.loading = false;       
             state.error = action.payload;
         })
     }

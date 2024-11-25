@@ -27,7 +27,7 @@ function Login() {
         onSubmit: async (values)=>{
             const resultAction = await dispatch(loginUser(values))
             if (loginUser.fulfilled.match(resultAction)) {
-                navigate('/home'); // Redirect to home page
+                navigate('/home');
             }
         }
     })

@@ -43,11 +43,36 @@ export const monogoGetUser=async ()=>{
 }
 
 export const mongoAddUser=async (user)=>{
-    const res = await axiosInstance.post('/users/auth/signup',user);
+    const res = await axiosInstance.post('/users/auth/signup', user);
     return res.data;
 }
 
 export const monogoCheckUser=async (user)=>{
-    const res = await axiosInstance.post('/users/auth/login',user);
+    const res = await axiosInstance.post('/users/auth/login', user);
     return res.data;
+}
+
+export const monogoGetAddresses = async()=>{
+    const res= await axiosInstance.get(`/address`, authorization)
+    return res.data.data;
+}
+
+export const monogoAddAddress = async(newAddress)=>{
+    const res= await axiosInstance.post(`/address`, newAddress, authorization)
+    return res.data.data;
+}
+
+export const monogoUpdateAddress = async(addressId, newAddress)=>{
+    const res= await axiosInstance.put(`/address/${addressId}`, newAddress, authorization)
+    return res.data.data;
+}
+
+export const monogoSetPrimaryAddress = async(addressId)=>{
+    const res= await axiosInstance.put(`/address/primary/${addressId}`, {}, authorization)
+    return res.data.data;
+}
+
+export const monogoDeleteAddress = async(addressId)=>{
+    const res= await axiosInstance.delete(`/address/${addressId}`, authorization)
+    return res.data.data;
 }
