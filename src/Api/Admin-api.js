@@ -1,4 +1,5 @@
 import axios from "axios";
+import axiosInstance, { authorization } from "./axiosInstance";
 
 const USERURL = "http://localhost:5001/users";
 const PRODUCTURL = "http://localhost:5001/products";
@@ -24,6 +25,29 @@ export const blockUserById=(id,status)=>{
     return axios.patch(`${USERURL}/${id}`,{block:status})
 }
 
+//mongoose users
+
+export const monogoGetAllUsers = async()=>{
+    const res= await axiosInstance.get('/admin/users', authorization)
+    return res.data.data;
+}
+
+export const monogoGetUserById = async(userId)=>{
+    const res= await axiosInstance.get(`/admin/users/${userId}`, authorization)
+    return res.data.data;
+}
+
+export const monogoDeleteUserById = async(userId)=>{
+    const res= await axiosInstance.delete(`/admin/users/${userId}`, authorization)
+    console.log(res.data.data);
+    return res.data.data;
+}
+
+export const monogoBlockUserById = async(userId)=>{
+    const res= await axiosInstance.patch(`/admin/users/${userId}`, {}, authorization)
+    return res.data.data;
+}
+
 //products
 export const getAllProducts=()=>{
     return axios.get(PRODUCTURL);
@@ -42,6 +66,35 @@ export const editProduct=(id,updatedProduct)=>{
     return axios.patch(`${PRODUCTURL}/${id}`,updatedProduct)
 }
 
+// mongoose products
+
+export const monogoGetAllProducts = async()=>{
+    const res= await axiosInstance.get(`/admin/products`, authorization)
+    return res.data.data;
+}
+
+export const monogoGetProductById = async(productId)=>{
+    const res= await axiosInstance.get(`/admin/products/${productId}`, authorization)
+    return res.data.data;
+}
+
+export const monogoAddProduct = async()=>{
+    const res= await axiosInstance.post(`/admin/products`, authorization)
+    return res.data.data;
+}
+
+export const monogoDeleteProductById = async(productId)=>{
+    const res= await axiosInstance.delete(`/admin/products/${productId}`, authorization)
+    return res.data.data;
+}
+
+
+export const monogoUpdataProductById = async(productId, updatedProduct)=>{
+    const res= await axiosInstance.patch(`/admin/products/${productId}`, updatedProduct, authorization)
+    return res.data.data;
+}
+
+
 //Orders
 export const getTotalOrders=async()=>{
     const res=await axios.get(ORDERSURL)
@@ -50,4 +103,32 @@ export const getTotalOrders=async()=>{
 export const getTotalSales= async ()=>{
     const res = await axios.get(`${ORDERSURL}/500`)
     return res.data.totalprice;
+}
+
+//mongoose orders
+
+export const monogoGetAllOrders = async()=>{
+    const res= await axiosInstance.get(`/admin/orders`, authorization)
+    return res.data.data;
+}
+export const adminGetOrdersById = async(userId)=>{
+    const res= await axiosInstance.get(`/admin/orders/${userId}`, authorization)
+    console.log(res.data.data);
+    
+    return res.data.data;
+}
+
+export const monogogetOrderCountById = async()=>{
+    const res= await axiosInstance.get(`/admin/order-count`, authorization)
+    return res.data.data;
+}
+
+export const monogoGetTotalRevenue = async()=>{
+    const res= await axiosInstance.get(`/admin/total-revenue`, authorization)
+    return res.data.data;
+}
+
+export const monogoGetSoldProductCount = async()=>{
+    const res= await axiosInstance.get(`/admin/total-product-sold`, authorization)
+    return res.data.data;
 }

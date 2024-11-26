@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react'
 import AdminNavbar from '../../../components/AdminNav'
 import Sidebar from '../../../components/SideBar'
 import { useNavigate } from 'react-router-dom';
-import { getAllProducts, getAllUsers, getTotalOrders, getTotalSales } from '../../../Api/Admin-api';
-import { getBestSeller } from '../../../Api/Product-api';
+import { getAllProducts, getAllUsers, getTotalOrders, getTotalSales, monogoGetAllOrders, monogoGetAllProducts, monogoGetAllUsers, monogoGetTotalRevenue } from '../../../Api/Admin-api';
+import { getBestSeller, mongoGetBestSeller } from '../../../Api/Product-api';
 
 function Dashboard() {
   const navigate =useNavigate();
@@ -12,28 +12,30 @@ function Dashboard() {
   const [totalOrders,setTotalOrders]=useState([]);
   const [totalSales,setTotalSales]=useState(0);
   const [bestSellers,setBestSellers]=useState([]);
-  const admin=localStorage.getItem('admin');
+  const admin=localStorage.getItem('token');
 
   useEffect(()=>{
-    getAllUsers()
-    .then((res)=>{
-      setUsers(res.data)
-    })
-    getAllProducts()
-    .then((res)=>{
-      setProducts(res.data)
-    })
-    getTotalOrders()
-    .then((res)=>{
-      setTotalOrders(res)
-      // console.log(totalOrders)
-    })
-    getBestSeller()
-    .then(res=>{
-      setBestSellers(res.data)
-    })
-    getTotalSales()
-    .then(res=>setTotalSales(res))
+    if(admin){
+      monogoGetAllUsers()
+      .then((res)=>setUsers(res))
+      .catch(err=>console.error(err))
+      
+      monogoGetAllProducts()
+      .then((res)=>setProducts(res))
+      .catch(err=>console.error(err))
+      
+      monogoGetAllOrders()
+      .then((res)=>setTotalOrders(res))
+      .catch(err=>console.error(err))
+      
+      mongoGetBestSeller()
+      .then(res=>setBestSellers(res.data))
+      .catch(err=>console.error(err))
+
+      monogoGetTotalRevenue()
+      .then(res=>setTotalSales(res))
+      .catch(err=>console.error(err))
+    }
   },[])
   
   return (
@@ -55,7 +57,7 @@ function Dashboard() {
               <div className=' w-[330px] h-[200px] p-6 bg-white rounded-lg shadow-lg col-span-2 flex justify-between'>
                 <div>
                   <div className="text-green-600 font-bold">Total Orders</div>
-                  <div className="text-3xl font-semibold">{totalOrders.length-1}</div>
+                  <div className="text-3xl font-semibold">{totalOrders.length}</div>
                 </div>
                 <div>
                   <img src="https://cdn-icons-png.flaticon.com/512/1559/1559859.png" className='w-[150px]' alt="" />
@@ -64,7 +66,7 @@ function Dashboard() {
               <div className=' w-[330px] h-[200px] p-6 bg-white rounded-lg shadow-lg col-span-2 flex justify-between'>
                 <div>
                   <div className="text-green-600 font-bold">Total Users</div>
-                  <div className="text-3xl font-semibold">{users.length}</div>
+                  <div className="text-3xl font-semibold">{users && users.length}</div>
                 </div>
                 <div>
                   <img src="https://cdn-icons-png.flaticon.com/512/1165/1165725.png" className='w-[130px] mt-3' alt="" />
@@ -84,22 +86,20 @@ function Dashboard() {
                   <span className='text-2xl text-center font-semibold border-b-2'>RECENT ORDERS</span>
                   <div className='grid grid-cols-4 justify-items-center items-center mb-5'>
                         <span className='text-lg font-semibold'>USER</span>
-                        <span className='text-lg font-semibold'>ORDER ID</span>
+                        <span className='text-lg font-semibold'>CITY</span>
                         <span className='text-lg font-semibold'>DATE</span>
                         <span className='text-lg font-semibold'>IMAGE</span>
                         
                         <span className='text-lg font-semibold'></span>
                   </div>
                   <div className='h-[400px] overflow-auto custom-scrollbar'>
-                      {totalOrders.slice(1).reverse().map((order)=>(
-                        <div key={order.id} className='grid grid-cols-4 justify-items-center mb-3'>
-                        <span>{order.user}</span>
-                        <span>{order.id}</span>
-                        <span>{order.date.day}</span>
+                      {totalOrders && totalOrders.map((order)=>(
+                        <div key={order._id} className='grid grid-cols-4 justify-items-center mb-3'>
+                        <span>{order.user[0].username}</span>
+                        <span>{order.deliveryAddress.city}</span>
+                        <span>{order.createdAt}</span>
                         <div className='grid grid-cols-1 space-y-5 justify-items-center items-center mb-5'>
-                        {order.item.map(item=>(
-                            <img key={item.id} className='w-[70px]' src={item.images[0]} alt="" />
-                        ))}
+                            <img key={order.items.productDetails[0]._id} className='w-[70px]' src={order.items.productDetails[0].images[0]} alt="" />
                         </div>
                         </div>
                         ))}
@@ -116,7 +116,7 @@ function Dashboard() {
                         <span className='text-lg font-semibold'>STOCK</span>
                   </div>
                   <div className='h-[430px] overflow-auto custom-scrollbar'>
-                    {products.slice(0).reverse().map(product=>(
+                    {products.map(product=>(
                       <div key={product.id} className='grid grid-cols-4 justify-items-center items-center mb-3'>
                         <img className='w-[70px]' src={product.images[0]} alt="" />
                         <span>{product.name}</span>

@@ -7,7 +7,8 @@ import { useNavigate, useParams } from 'react-router-dom'
 import MyFooter from '../../../components/MyFooter'
 import AdminNavbar from '../../../components/AdminNav'
 import Sidebar from '../../../components/SideBar'
-import { getOrderById } from '../../../Api/Product-api'
+import { getOrderById, mongoGetOrderById } from '../../../Api/Product-api'
+import { adminGetOrdersById, monogoGetUserById } from '../../../Api/Admin-api'
 
 function UserView() {
     const navigate=useNavigate();
@@ -19,13 +20,10 @@ function UserView() {
     const [userOrders,setUserOrders]=useState(false);
     const {userId}=useParams()
     useEffect(()=>{
-        getUserById(userId)
-        .then(res=>setUser(res.data))
+        monogoGetUserById(userId)
+        .then(res=>setUser(res))
         .catch(err=>console.error(err))
-        getAddressById(userId)
-        .then(res=>setAddress(res))
-        .catch(err=>console.error(err))
-        getOrderById(userId)
+        adminGetOrdersById(userId)
         .then(res=>setOrders(res))
         .catch(err=>console.error(err))
     },[])
@@ -66,31 +64,6 @@ function UserView() {
                         <input className='text-xl p-3' type="text" value={user.username} placeholder='Username' disabled/>
                         <label htmlFor="" className='text-2xl'>Email</label>   
                         <input className='text-xl p-3' type="text" value={user.email} placeholder='Username' disabled/>
-                    {(address)?(
-                        <div className='border flex flex-col mt-3'>
-                                <span className='text-2xl text-center p-2'>ADDRESS</span>
-                                <div className='sm:space-x-3 space-x-0 flex flex-wrap mb-3 justify-center items-center'>
-                                    <label htmlFor="">Pincode</label>
-                                    <input className='text-xl bg-transparent p-2' name='pincode' value={address.pincode} type="text"  placeholder='Pincode' disabled/>
-                                    <label htmlFor="">house name</label>
-                                    <input className='text-xl bg-transparent p-2' name='housename' value={address.housename} type="text"  placeholder='House Name' disabled/>
-                                </div>
-                                <div className='sm:space-x-3 space-x-0 flex flex-wrap mb-3 justify-center items-center'>
-                                    <label htmlFor="">City</label>
-                                    <input className='text-xl bg-transparent p-2' name='city' value={address.city} type="text"  placeholder='city'disabled/>
-                                    <label htmlFor="">Lank mark</label>
-                                    <input className='text-xl bg-transparent p-2' name='landmark' value={address.landmark} type="text"  placeholder='landmark'disabled/>
-                                </div>
-                                <div className='sm:space-x-3 space-x-0 flex flex-wrap mb-3 justify-center items-center'>
-                                    <label htmlFor="">District</label>
-                                    <input className='text-xl bg-transparent p-2' name='district' value={address.district} type="text"  placeholder='district'disabled/>
-                                    <label htmlFor="">State</label>
-                                    <input className='text-xl bg-transparent p-2' name='state' value={address.state} type="text"  placeholder='state'disabled/>
-                                </div>
-                        </div>
-                    ):(
-                        null
-                    )}
                     </>
                 ):(
                     null

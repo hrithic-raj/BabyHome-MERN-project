@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import AdminNavbar from '../../../components/AdminNav'
 import Sidebar from '../../../components/SideBar'
 import { useNavigate } from 'react-router-dom'
-import { blockUserById, deleteUserById, getAllUsers } from '../../../Api/Admin-api';
+import { blockUserById, deleteUserById, getAllUsers, monogoBlockUserById, monogoDeleteUserById, monogoGetAllUsers, monogogetOrderCountById } from '../../../Api/Admin-api';
 import { toast } from 'react-toastify';
 
 function AdminUser() {
@@ -13,22 +13,14 @@ function AdminUser() {
   const admin=localStorage.getItem('admin');
   
   useEffect(()=>{
-    getAllUsers()
-    .then((res)=>{
-      setUsers(res.data)
-    })
+    monogoGetAllUsers()
+    .then((res)=>setUsers(res))
+    .catch(err=>console.error(err))
   },[])
   
-  const handleDel=(id)=>{
-    deleteUserById(id)
-    .then(()=>{
-      // console.log('user deleted')
-      getAllUsers()
-      .then((res)=>{
-        setUsers(res.data)
-        toast.success("User Deleted")
-      })
-    })
+  const handleDel= async (id)=>{
+    await monogoDeleteUserById(id)
+    .then((res)=>setUsers(res))
     .catch((error) => console.error('Error deleting product:', error));
   }
   
@@ -44,13 +36,13 @@ function AdminUser() {
       }
   },[searchTerm,users])
 
-  const handleBlock=async(id,status)=>{
-    await blockUserById(id,!status)
-    .then(()=>{
-      getAllUsers()
+  const handleBlock=async(id)=>{
+    await monogoBlockUserById(id)
+    .then((res)=>{
+      toast.success(res?"User Blocked":"User Unblocked")
+      monogoGetAllUsers()
       .then((res)=>{
-        setUsers(res.data)
-        toast.success(!status?"User Blocked":"User Unblocked")
+        setUsers(res)
       })
     })
     }
@@ -85,25 +77,23 @@ function AdminUser() {
                     />
                 </div>
                 <div className='mt-5 h-[410px] flex flex-col md:w-full w-[300px] overflow-auto'>
-                    <div className='mb-6 grid grid-cols-7 justify-items-center w-[700px] md:w-full'>
+                    <div className='mb-6 grid grid-cols-5 justify-items-center w-[700px] md:w-full'>
                         <span className='text-lg font-semibold'>NAME</span>
                         <span className='text-lg font-semibold'>USERNAME</span>
                         <span className='text-lg font-semibold'>EMAIL</span>
-                        <span className='text-lg font-semibold'>CITY</span>
-                        <span className='text-lg font-semibold'>ORDERS</span>
                         <span className='text-lg font-semibold'>BLOCK</span>
                         <span className='text-lg font-semibold'>DELETE</span>
                     </div>
-                    {filteredUsers.slice(0).reverse().map((user)=>(
-                      <div key={user.id} className=' mb-3 grid grid-cols-7 justify-items-center w-[700px] md:w-full'>
-                        <span className='cursor-pointer' onClick={()=>handleUserClick(user.id)}>{user.name}</span>
-                        <span className='cursor-pointer' onClick={()=>handleUserClick(user.id)}>{user.username}</span>
+                    {users && filteredUsers && filteredUsers.map((user)=>(
+                      user.role === "user" && (
+                      <div key={user._id} className=' mb-3 grid grid-cols-5 justify-items-center w-[700px] md:w-full'>
+                        <span className='cursor-pointer' onClick={()=>handleUserClick(user._id)}>{user.name}</span>
+                        <span className='cursor-pointer' onClick={()=>handleUserClick(user._id)}>{user.username}</span>
                         <span>{user.email}</span>
-                        {user.address ?<span>{user.address.city}</span>: 'NOT SET'}
-                        <span>{user.orders.length}</span>
-                        <button className='bg-pink-300 p-1 rounded-md' onClick={()=>handleBlock(user.id,user.block)}>{user.block?"UNBLOCK":"BLOCK"}</button>
-                        <button className='bg-red-400 p-1 rounded-md' onClick={()=>handleDel(user.id)}>DELETE</button>
+                        <button className='bg-pink-300 p-1 rounded-md' onClick={()=>handleBlock(user._id)}>{user.block?"UNBLOCK":"BLOCK"}</button>
+                        <button className='bg-red-400 p-1 rounded-md' onClick={()=>handleDel(user._id)}>DELETE</button>
                       </div>
+                      )
                     ))}
                 </div>
               </div>
