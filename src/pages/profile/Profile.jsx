@@ -9,10 +9,11 @@ import {useSelector, useDispatch} from 'react-redux'
 import { logout } from '../../Redux/Slices/AuthSlice'
 function Profile() {
     const navigate=useNavigate();
-    const [profilePic,setProfilePic]=useState(dp)
     const userId=localStorage.getItem('token')
+    const [profilePic,setProfilePic]=useState(dp)
     const [user,setUser]=useState([]);
     const dispatch = useDispatch()
+    // const { user, admin, error} = useSelector((state)=>state.auth)
     const [addresses ,setAddresses]=useState([]);
     const [editId,setEditId]=useState(null);
     const [addressFlag,setAddressFlag]=useState(false);
@@ -24,6 +25,7 @@ function Profile() {
         district :''
     });
     useEffect(()=>{
+        const userId=localStorage.getItem('token')
         if(userId){
             monogoGetUser()
             .then(res=>setUser(res))
@@ -31,8 +33,12 @@ function Profile() {
             monogoGetAddresses()
             .then(res=>setAddresses(res))
             .catch(err=>console.error(err))
+        }else{
+            setUser([]);
+            setAddresses([])
         }
-    },[])
+        
+    },[localStorage.getItem('token')])
 
     const handleLogout=()=>{
         dispatch(logout())
@@ -83,6 +89,8 @@ function Profile() {
         .then(res=>setAddresses(res.allAddress))
         .catch(err=> console.error(err))
     }
+    // console.log(user);
+    
     
   return (
     <div>

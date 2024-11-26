@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import MyNavbar from '../../components/MyNavbar'
-import { getCartById, deleteCartById, increaseCount, decreaseCount, ClearCart, addToOrder, monogoGetCartById} from '../../Api/Product-api'
+import { getCartById, deleteCartById, increaseCount, decreaseCount, ClearCart, addToOrder, monogoGetCartById, monogoIncreaseCount, monogoDecreaseCount, monogoDeleteCartItem, mongoCreateOrderById} from '../../Api/Product-api'
 import gpay from '../../Assets/Main/gpay.png'
 import paytm from '../../Assets/Main/paytm.png'
 import { getAddressById, getUserById, monogoGetPrimaryAddress, monogoGetUser } from '../../Api/Login-api'
@@ -52,22 +52,23 @@ function Payment() {
             .catch(err=>console.error(err))
     },[userId])
     
-    const removeFromCart=(productId)=>{
-        deleteCartById(userId,productId)
+    const removeFromCart=async(productId)=>{
+         
+        await monogoDeleteCartItem(productId)
         .then(res=>{
             setCart(res)
-            toast.success("Product Removed",{position:'bottom-left'})
+            toast.success("Product Removed From Cart",{position:'bottom-left'});
         })
         .catch(err=>console.error(err))
     }
     
-    const handleAddCount=(product)=>{
-        increaseCount(userId,product)
+    const handleAddCount=(productId)=>{
+        monogoIncreaseCount(productId)
         .then(res=>setCart(res))
         .catch(err=>console.error(err))
     }
-    const handleSubCount=(product)=>{
-       decreaseCount(userId,product)
+    const handleSubCount=(productId)=>{
+       monogoDecreaseCount(productId)
         .then(res=>setCart(res))
         .catch(err=>console.error(err))
     }
@@ -78,43 +79,27 @@ function Payment() {
     setSelectedOption(e.target.value);
   };
   const handleOrder = async () => {
-    // e.preventDefault();
-    if(cart.length>0 && selectedOption && address){
-        const d=new Date()
-        const orderList={ id:Date.now(),item:cart,paymentMethod : selectedOption , date :{ time: d.toLocaleTimeString(), day:d.toDateString()},orderprice:total}
-        const totalOrderList={ id:Date.now(),user:user.name,item:cart,paymentMethod : selectedOption , date :{ time: d.toLocaleTimeString(), day:d.toDateString()},orderprice:total}
-        // console.log(address)
-        await addToOrder(userId,orderList,totalOrderList,total)
-        .then(res=>{
+      // e.preventDefault();
+    if(cart.products && cart.products.length>0 && selectedOption && address.city){
+        mongoCreateOrderById(address._id,selectedOption)
+        .then((res)=>{
             toast.success("Order Placed",{position:'bottom-left'})
-            // setOrderPlacedAlert(true)
             setTimeout(() => {
-                // setOrderPlacedAlert(false)
                 navigate('/orders')
-            }, 2000);
+            }, 1000);
         })
         .catch(err=>console.error(err))
-    
-        await ClearCart(userId)
-        .then(res=>setCart(res))
-        .catch(err=>console.error(err))
-    }else if(cart.length<0){
+    }else if(!cart.products && cart.products.length<=0){
         toast.warning("Your cart is Empty",{position:'bottom-left'})
-        // setCartEmptyAlert(true)
         setTimeout(() => {
-            // setCartEmptyAlert(false)
             navigate('/store')
         }, 1000);
     }
     else if(!selectedOption){
         toast.warning("Add a Payment Option",{position:'bottom-left'})
-        // setPaymentOptionAlert(true)
-        setTimeout(() => {
-            // setPaymentOptionAlert(false)
-        }, 3000);
     }
-    else if(!address){
-        toast.warning("Add a Shipping Address",{position:'bottom-left'})
+    else if(!address.city){
+        toast.warning("Add a primary Shipping Address",{position:'bottom-left'})
     }
   };
 
@@ -129,16 +114,14 @@ function Payment() {
                 </div>
                 <hr className=''/>
                 <div className=' ps-2'>
-                    {address?(
+                    {address && address.city?(
                         <div className='space-x-3 flex justify-between p-5'>
                                 <div className='max-w-300px '>
-                                    <span className='text-2xl font-semibold'>Deliver to : {user.name} </span>
-                                    <span className='text-2xl max-w-[300px]'>{address.housename}, </span>
-                                    <span className='text-2xl max-w-[300px]'>{address.city}, </span>
-                                    <span className='text-2xl max-w-[300px]'>{address.landmark}, </span>
-                                    <span className='text-2xl max-w-[300px]'>{address.district}, </span>
-                                    <span className='text-2xl max-w-[300px]'>{address.state}, </span>
-                                    <span className='text-2xl max-w-[300px]'>-{address.pincode}</span>
+                                <span className='text-2xl font-semibold'>Deliver to : {user.name} </span>
+                                <span className='text-2xl max-w-[300px]'>{address.street}, </span>
+                                <span className='text-2xl max-w-[300px]'>{address.city}, </span>
+                                <span className='text-2xl max-w-[300px]'>{address.phone}, </span>
+                                <span className='text-2xl max-w-[300px]'>-{address.pincode}</span>
                                 </div>
                                 <button className='bg-orange-400 rounded w-[100px] p-2 h-[50px] text-white' onClick={()=>navigate('/profile')}>Change</button>
                             </div>
@@ -157,37 +140,38 @@ function Payment() {
                     </div>
                     <hr className=''/>
                     <div className=' h-[430px] overflow-auto custom-scrollbar ps-2'>
-                    {cart.length>0?(
-                        cart.map(item=>(
-                            <div key={item.id} className='flex flex-wrap mt-3 mb-1'>
+                    {cart && cart.products && cart.products.length>0?(
+                        cart.products.map(item=>(
+                            <div key={item.productId._id} className='flex flex-wrap mt-3 mb-1'>
                             <div className='w-[150px] flex flex-col justify-center items-center mt-3 mb-3'>
-                                <img className='w-[100px] h-[100px]  hover:transform hover:scale-105  transition-all duration-500 ease-in-out' src={item.images[0]} alt="product image" />
+                                <img className='w-[100px] h-[100px]  hover:transform hover:scale-105  transition-all duration-500 ease-in-out' src={item.productId.images && item.productId.images[0]} alt="product image" />
                                 <div className='mt-5 border border-gray-500 flex justify-center space-x-4 items-center h-8 w rounded'>
-                                    <button  onClick={()=>handleSubCount(item)}  className='text-2xl rounded w-10 h-10'>-</button>
+                                    <button  onClick={()=>handleSubCount(item.productId._id)}  className='text-2xl rounded w-10 h-10'>-</button>
                                     <span className='text-2xl'>{item.count}</span>
-                                    <button onClick={()=>handleAddCount(item)} className='text-2xl rounded w-10 h-10'>+</button>
+                                    <button onClick={()=>handleAddCount(item.productId._id)} className='text-2xl rounded w-10 h-10'>+</button>
                                 </div>
                             </div>
                             <div className='grid w-[70%]'>
                                 <div className='flex flex-col grid-cols-2 h-[50px] overflow-hidden'>
-                                    <span className='text-2xl xl:text-3xl'>{item.name}</span>
+                                    <span className='text-2xl xl:text-3xl'>{item.productId.name}</span>
                                 </div>
                                 <div className='flex space-x-3 mb-3 grid-cols-1'>
                                     <span className='text-gray-500'>MRP : </span>
-                                    <span className='text-gray-500 line-through'> ₹ {item.oldprice}.00</span>
-                                    <span className=' text-red-500'>Save ₹ {item.oldprice-item.price}.00</span>
+                                    <span className='text-gray-500 line-through'> ₹ {item.productId.oldprice * item.count}.00</span>
+                                    <span className=' text-red-500'>Save ₹ {(item.productId.oldprice * item.count)-(item.productId.price * item.count)}.00</span>
                                 </div>  
                                 <div className='flex justify-between flex-wrap grid-cols-1'>
-                                <span className='text-3xl text-black mb-2 font-bold'>₹ {item.totalprice}.00</span>
-                                <button className='bg-red-400 rounded p-2 h-[50px] text-white' onClick={()=>removeFromCart(item.id)}>Remove from Cart</button>
+                                <span className='text-3xl text-black mb-2 font-bold'>₹ {item.totalPrice}.00</span>
+                                <button className='bg-red-400 rounded p-2 h-[50px] text-white' onClick={()=>removeFromCart(item.productId._id)}>Remove from Cart</button>
                                 </div>
                                 
                             </div>
                         </div>
                         ))
                     ):(
-                        <div className='flex justify-center'>
+                        <div className='flex relative justify-center'>
                             <img src="https://www.adasglobal.com/img/empty-cart.png" className='h-[430px]' alt="" />
+                            <button onClick={()=>navigate('/store')} className='bg-blue-400 rounded p-2 h-[50px] text-white absolute top-3/4'>GO TO STORE</button>
                         </div>
                     )}
                     </div>
@@ -276,23 +260,26 @@ function Payment() {
                     </div>
                     <hr className='hidden xl:flex'/>
                     <div className='hidden xl:flex justify-end items-center me-5 h-[100px]'>
-                        <button className='bg-orange-400 rounded w-[200px] p-2 h-[50px] text-white' onClick={handleOrder}>PLACE ORDER</button>
+                        {cart && cart.products && cart.products.length>0 &&
+                            <button className='bg-orange-400 rounded w-[200px] p-2 h-[50px] text-white' onClick={handleOrder}>PLACE ORDER</button>
+                        }
                     </div>
                 </div>
             </div>
+            {cart && cart.products && 
                 <div className='border w-[60%] xl:w-[400px] xl:fixed xl:right-10 xl:top-1/4 xl:h-[350px] h-[450px] shadow-lg'>
                     <div className='flex flex-col flex-wrap'>
                     <span className='text-2xl text-center font-semibold mt-3 mb-3'>PRICE DETAILS</span><hr />
                     <div className='ms-4 me-4 mt-5 space-y-5'>
                         <div className='flex justify-between'>
-                            <span>Price ({cart.length})</span>
-                            <span>₹ {oldTotal}</span>
+                            <span>Price ({cart.products.length})</span>
+                            <span>₹ {cart.oldTotalCartPrice}</span>
                         </div>
                         <div className='flex justify-between'>
                             <span>Discount</span>
-                            <span className='text-green-400'>- ₹ {oldTotal-total}</span>
+                            <span className='text-green-400'>- ₹ {cart.oldTotalCartPrice-cart.totalCartPrice}</span>
                         </div>
-                        {total ?(
+                        {cart.platformFee ?(
                             <div className='flex justify-between'>
                                 <span>Platform Fee</span>
                                 <span>₹ 20</span>
@@ -303,7 +290,14 @@ function Payment() {
                                 <span>₹ 0</span>
                             </div>
                         )}
-                        {total>499?(
+                        {cart.delivaryCharge?(
+                            <div className='flex justify-between'>
+                                <span>Delivary Charge</span>
+                                <div>
+                                    <span className=''>₹ 40</span>
+                                </div>
+                            </div>
+                        ):(
                             <div className='flex justify-between'>
                                 <span>Delivary Charge</span>
                                 <div>
@@ -311,26 +305,19 @@ function Payment() {
                                     <span className='text-green-400'>Free</span>
                                 </div>
                             </div>
-                        ):(
-                            <div className='flex justify-between'>
-                                <span>Delivary Charge</span>
-                                <div>
-                                    <span className=''>₹ 40</span>
-                                </div>
-                            </div>
                         )}
-                            {total?(
-                                total>499?(
+                            {cart.totalCartPrice!==0?(
+                                cart.totalCartPrice>499?(
                                     
                                     <div className='flex justify-between'>
                                         <span className='text-2xl font-bold'>Total Amount</span>
-                                        <span className='text-2xl font-bold'>₹{total}</span>
+                                        <span className='text-2xl font-bold'>₹{cart.totalCartPrice+20}</span>
                                     </div>
                                 ):(
                                     <div className='flex justify-between'>
                                         
                                         <span className='text-2xl font-bold'>Total Amount</span>
-                                        <span className='text-2xl font-bold'>₹{total}</span>
+                                        <span className='text-2xl font-bold'>₹{cart.totalCartPrice+60}</span>
                                     </div>
                                 )
                             ):(
@@ -341,12 +328,14 @@ function Payment() {
                             )}
                             <hr className='xl:hidden flex'/>
                             <div className='xl:hidden flex justify-end items-center me-5 h-[100px]'>
-                                
+                            {cart && cart.products && cart.products.length>0 &&
                                 <button className='bg-orange-400 rounded w-[200px] p-2 h-[50px] text-white ' onClick={handleOrder}>PLACE ORDER</button>
+                            }
                             </div>
                     </div>
                     </div>
                 </div>
+                }
             </div>
             {/* <MyFooter/> */}
         </div>

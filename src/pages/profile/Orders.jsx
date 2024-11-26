@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext, useCallback} from 'react'
 import dp from '../../Assets/Main/profile.png'
 import MyNavbar from '../../components/MyNavbar'
-import { addAddress, getAddressById, getUserById } from '../../Api/Login-api'
+import { addAddress, getAddressById, getUserById, monogoGetUser } from '../../Api/Login-api'
 import { AuthContext } from '../../contexts/AuthContext'
 import { useNavigate } from 'react-router-dom'
 import { getOrderById, mongoGetOrderById } from '../../Api/Product-api'
@@ -12,15 +12,19 @@ function Orders() {
     const [profilePic,setProfilePic]=useState(dp)
     const userId=localStorage.getItem('token')
     const [orders,setOrders]=useState([]);
+    const [user,setUser]=useState([]);
     const [address,setAddress]=useState([]);
     const {logout}=useContext(AuthContext)
     useEffect(()=>{
         mongoGetOrderById(userId)
-        .then(res=>setOrders(res))
+        .then(res=>{
+            console.log(res)
+            setOrders(res)
+        })
         .catch(err=>console.error(err))
-        getAddressById(userId)
-        .then(res=>setAddress(res))
-        .catch(err=>console.error(err))
+        monogoGetUser()
+            .then(res=>setUser(res))
+            .catch(err=>console.error(err))
     },[])
     const handleLogout=()=>{
         logout()
@@ -47,40 +51,40 @@ function Orders() {
             </div>
             <div className='w-[800px] h-[600px] overflow-auto custom-scrollbar flex flex-col shadow-md p-4 border space-y-4'>
                 {userId?(
-                        orders.slice(0).reverse().map(orderlist=>(
-                            <div key={orderlist.id} className=' border shadow-lg flex flex-col space-y-3 p-2'> 
-                            {orderlist.item.map(order=>(
-                                <div key={order.id} className='border flex rounded-lg'>
+                    orders && orders.length>0? (
+                        orders.reverse().map(orderlist=>(
+                            <div key={orderlist._id} className=' border shadow-lg flex flex-col space-y-3 p-2'> 
+                                <div key={orderlist.items._id} className='border flex rounded-lg'>
                                 <div className='flex flex-col items-center justify-center h-[150px] w-[150px]'>
-                                    <img className='ms-2 w-28 mt-2 rounded hover:transform hover:scale-105  transition-all duration-500 ease-in-out' src={order.images[0]} alt="" />
-                                    <span>Quantity : {order.count}</span>
+                                    <img className='ms-2 w-28 mt-2 rounded hover:transform hover:scale-105  transition-all duration-500 ease-in-out' src={orderlist.items.productDetails[0].images && orderlist.items.productDetails[0].images[0]} alt="" />
+                                    <span>Quantity : {orderlist.items.count}</span>
                                 </div>
                                 <div className='sm-flex-row flex  ms-2 w-[800px] justify-between me-4'>
                                     <div className='flex flex-col justify-center space-y-2'>
-                                        <span className='text-xl'>{order.name}</span>
+                                        <span className='text-xl'>{orderlist.items.productDetails[0] && orderlist.items.productDetails[0].name}</span>
                                         <div className='flex flex-col '>
-                                        <span className='text-lg'>Address : {address.housename}</span>
-                                        <span className='text-lg'>{address.city} , {address.district}</span>
-                                        <span className='text-lg'>{address.state}</span>
+                                        <span className='text-lg'>Address : {orderlist.deliveryAddress.street}</span>
+                                        <span className='text-lg'>{orderlist.deliveryAddress.city} , {orderlist.deliveryAddress.phone}</span>
+                                        <span className='text-lg'>{orderlist.deliveryAddress.pincode}</span>
                                         </div>
                                     </div>
                                     <div className='flex justify-center items-center'>
-                                        <span className='text-xl'>{order.totalprice}</span>
+                                        <span className='text-xl'>{orderlist.items.count * orderlist.items.price}</span>
                                     </div>
                                     <div className='flex flex-col items-center justify-between'>
                                         <span className='text-xl'>{orderlist.paymentMethod}</span>
                                         <div className='flex flex-col items-center'>
-                                            <span className='text'>{orderlist.date.day}</span>
-                                            <span className='text'>{orderlist.date.time}</span>
+                                            <span className='text'>{orderlist.createdAt}</span>
                                         </div>
                                     </div>
                                 </div>
                                 </div>
-                            ))}
-                            order id : {orderlist.id} , total order price : ₹ {orderlist.orderprice}
+                            
+                            order id : {orderlist._id} 
                             </div>
                     
-                ))
+                        ))
+                    ):(null)
                 ):null
             }
                 

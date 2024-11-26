@@ -184,9 +184,15 @@ export const addToOrder = async(userId,ordersList,totalOrderList,total)=>{
 
 export const mongoGetOrderById=async()=>{
     const res=await axiosInstance.get(`/orders`,authorization)
-    console.log(res.data.data);
+    // console.log(res.data.data);
     return res.data.data;
 }
+
+export const mongoCreateOrderById=async(addressId,paymentMethod)=>{
+    const res= await axiosInstance.post(`/orders/${addressId}`, {paymentMethod}, authorization)
+    return res.data.data;
+}
+
 
 //newsletter
 

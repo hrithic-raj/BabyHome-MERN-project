@@ -72,10 +72,9 @@ function Cart() {
                 <div className='border w-[60%] p-2 shadow-lg'>
                     <div className='border shadow-lg '>
                         <div className=' ps-2'>
-                        {address?(
+                        {address && address.city?(
                             <div className='space-x-3 sm:flex-row flex flex-col justify-between p-5'>
                             <div className='max-w-300px '>
-                                
                                 <span className='text-2xl font-semibold'>Deliver to : {user.name} </span>
                                 <span className='text-2xl max-w-[300px]'>{address.street}, </span>
                                 <span className='text-2xl max-w-[300px]'>{address.city}, </span>
@@ -144,11 +143,11 @@ function Cart() {
                     ):(
                         <div className='flex relative justify-center'>
                             <img src="https://www.adasglobal.com/img/empty-cart.png" className='h-[430px]' alt="" />
-                            <button onClick={()=>navigate('/home')} className='bg-blue-400 rounded p-2 h-[50px] text-white absolute top-3/4'>GO TO STORE</button>
+                            <button onClick={()=>navigate('/store')} className='bg-blue-400 rounded p-2 h-[50px] text-white absolute top-3/4'>GO TO STORE</button>
                         </div>
                     )}
                     </div>
-                    {cart.products && cart.products.length>0?(
+                    {cart && cart.products && cart.products.length>0?(
                         <>
                             <hr />
                             <div className='hidden xl:flex justify-end items-center me-5 h-[100px]'>
@@ -219,7 +218,7 @@ function Cart() {
                             )}
                         
                     </div>
-                    {cart.products && cart.products.length>0?(
+                    {cart && cart.products && cart.products.length>0?(
                         <>
                             <hr className='xl:hidden'/>
                             <div className='xl:hidden flex justify-end items-center me-5 h-[100px]'>

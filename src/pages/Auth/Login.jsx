@@ -26,9 +26,6 @@ function Login() {
         validationSchema,
         onSubmit: async (values)=>{
             const resultAction = await dispatch(loginUser(values))
-            if (loginUser.fulfilled.match(resultAction)) {
-                navigate('/home');
-            }
         }
     })
 
