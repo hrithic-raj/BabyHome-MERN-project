@@ -93,8 +93,8 @@ function Dashboard() {
                         <span className='text-lg font-semibold'></span>
                   </div>
                   <div className='h-[400px] overflow-auto custom-scrollbar'>
-                      {totalOrders && totalOrders.map((order)=>(
-                        <div key={order._id} className='grid grid-cols-4 justify-items-center mb-3'>
+                      {totalOrders && totalOrders.map((order, index)=>(
+                        <div key={index} className='grid grid-cols-4 justify-items-center mb-3'>
                         <span>{order.user[0].username}</span>
                         <span>{order.deliveryAddress.city}</span>
                         <span>{order.createdAt}</span>

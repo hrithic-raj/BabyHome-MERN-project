@@ -29,12 +29,12 @@ function AdminNavbar(props) {
           console.log(productRes);
           
           // Filter products based on searchTerm
-          const searchProducts = productRes.data.filter(product =>
+          const searchProducts = productRes.filter(product =>
             product.name.toLowerCase().includes(searchTerm.toLowerCase())
           );
           
           // Filter users based on searchTerm
-          const searchUsers = userRes.data.filter(user =>
+          const searchUsers = userRes.filter(user =>
             user.name.toLowerCase().includes(searchTerm.toLowerCase())
           );
           
@@ -88,8 +88,8 @@ function AdminNavbar(props) {
                   )}
                   {users.map((user) => (
                     <li
-                      key={user.id}
-                      onClick={() => handleUserClick(user.id)}
+                      key={user._id}
+                      onClick={() => handleUserClick(user._id)}
                       className="cursor-pointer p-2 hover:bg-gray-100"
                     >
                       {user.name} (User)
@@ -101,8 +101,8 @@ function AdminNavbar(props) {
                   )}
                   {products.map((product) => (
                     <li
-                      key={product.id}
-                      onClick={() => handleProductClick(product.id)}
+                      key={product._id}
+                      onClick={() => handleProductClick(product._id)}
                       className="cursor-pointer p-2 hover:bg-gray-100"
                     >
                       {product.name} (Product)

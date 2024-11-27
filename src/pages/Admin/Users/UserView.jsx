@@ -8,7 +8,8 @@ import MyFooter from '../../../components/MyFooter'
 import AdminNavbar from '../../../components/AdminNav'
 import Sidebar from '../../../components/SideBar'
 import { getOrderById, mongoGetOrderById } from '../../../Api/Product-api'
-import { adminGetOrdersById, monogoGetUserById } from '../../../Api/Admin-api'
+import { adminGetOrdersById, monogoBlockUserById, monogoDeleteUserById, monogoGetUserById } from '../../../Api/Admin-api'
+import { toast } from 'react-toastify'
 
 function UserView() {
     const navigate=useNavigate();
@@ -37,7 +38,24 @@ function UserView() {
         setUserOrders(true)
         setUserDetails(false)
     }
-
+    const handleBlock=async(id)=>{
+        await monogoBlockUserById(id)
+        .then((res)=>{
+          toast.success(res?"User Blocked":"User Unblocked")
+          monogoGetUserById(userId)
+            .then(res=>setUser(res))
+            .catch(err=>console.error(err))
+        })
+    }
+    const handleDel= async (id)=>{
+        await monogoDeleteUserById(id)
+        .then((res)=>{
+            setTimeout(() => {
+                navigate('/admin/users')
+              }, 1000);
+        })
+        .catch((error) => console.error('Error deleting product:', error));
+    }
   return (
     <div className='relative bg-gray-100'>
         <AdminNavbar/>
@@ -64,6 +82,10 @@ function UserView() {
                         <input className='text-xl p-3' type="text" value={user.username} placeholder='Username' disabled/>
                         <label htmlFor="" className='text-2xl'>Email</label>   
                         <input className='text-xl p-3' type="text" value={user.email} placeholder='Username' disabled/>
+                        <div className='flex flex-col items-center gap-4 lg:justify-center h-10 lg:flex-row'>
+                            <button className='bg-pink-300 p-1 rounded-md w-[200px] h-10' onClick={()=>handleBlock(user._id)}>{user.block?"UNBLOCK":"BLOCK"}</button>
+                            <button className='bg-red-400 p-1 rounded-md w-[200px] h-10' onClick={()=>handleDel(user._id)}>DELETE</button>
+                        </div>
                     </>
                 ):(
                     null
