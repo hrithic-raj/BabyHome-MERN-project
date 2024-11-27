@@ -5,9 +5,10 @@ import {  } from '../../Api/Login-api'
 import { AuthContext } from '../../contexts/AuthContext'
 import { useNavigate } from 'react-router-dom'
 import MyFooter from '../../components/MyFooter'
-import { getWishlistById } from '../../Api/Product-api'
+import { addToCart, deleteFromWishlist, getWishlistById } from '../../Api/Product-api'
 import { useDispatch } from 'react-redux'
 import { logout } from '../../Redux/Slices/AuthSlice'
+import { toast } from 'react-toastify'
 
 function Wishlist() {
     const navigate=useNavigate();
@@ -21,7 +22,6 @@ function Wishlist() {
         .then(res=>{
             setWishlistItems(res)
             console.log(res);
-            
         })
         .catch(err=>console.error(err))
     },[userId])
@@ -29,14 +29,26 @@ function Wishlist() {
         dispatch(logout())
         navigate('/login')
     }
-    const addToCart=()=>{
-        navigate('/login')
+    const handleAddToCart=(productId)=>{
+      let quntity = 1;
+      addToCart(productId,quntity)
+      .then(res=>{
+        toast.success("Cart Updated",{position:'bottom-left'})
+        setTimeout(() => {
+          navigate('/cart')
+        }, 1000);
+      })
+      .catch(err=>console.error(err))
     }
-    const viewProduct=()=>{
-        navigate('/login')
+    const viewProduct=(productId)=>{
+      navigate(`/store/product/${productId}`)
     }
-    const removeFromWishlist=()=>{
-        navigate('/login')
+    const removeFromWishlist=(productId)=>{
+      deleteFromWishlist(productId)
+      .then(res=>{
+        setWishlistItems(res)
+      })
+      .catch(err=>console.error(err))
     }
 
   return (
@@ -60,15 +72,15 @@ function Wishlist() {
             </div>
             <div className='w-[800px] flex flex-col shadow-lg p-4 border'>
             <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Wishlist</h1>
-      <div className="flex flex-wrap gap-6">
+      {/* <h1 className="text-2xl font-bold mb-4">Wishlist</h1> */}
+      <div className="flex flex-wrap gap-6 h-[500px] overflow-auto custom-scrollbar">
         {wishlistItems && wishlistItems.products && wishlistItems.products.map((item) => (
           <div
-            key={item.id}
+            key={item._id}
             className="relative group w-52 border rounded-lg overflow-hidden shadow-md bg-white hover:shadow-lg"
           >
             <img
-              src={item.image}
+              src={item.images[0]}
               alt={item.name}
               className="w-full h-44 object-cover"
             />
@@ -80,19 +92,19 @@ function Wishlist() {
             <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             <button
                 className="mt-2 bg-blue-500 hover:bg-blue-600 w-[75%] h-10 text-white text-sm px-4 py-1 rounded focus:outline-none"
-                onClick={() => addToCart(item.id)}
+                onClick={() => handleAddToCart(item._id)}
               >
                 Add to Cart
               </button>
               <button
                 className="bg-green-500 hover:bg-green-600 w-[75%] h-10 text-white px-3 py-1 rounded focus:outline-none"
-                onClick={() => viewProduct(item.id)}
+                onClick={() => viewProduct(item._id)}
               >
                 View Product
               </button>
               <button
                 className="bg-red-500 hover:bg-red-600 w-[75%] h-10 text-white text-sm px-3 py-1 rounded focus:outline-none"
-                onClick={() => removeFromWishlist(item.id)}
+                onClick={() => removeFromWishlist(item._id)}
               >
                 Remove
               </button>

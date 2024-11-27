@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { AuthContext } from '../../../contexts/AuthContext'
-import { updataProductById } from '../../../Api/Admin-api';
-import { getProductById } from '../../../Api/Product-api';
+import { updataProductById, getProductById} from '../../../Api/Admin-api';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
@@ -243,7 +242,7 @@ function EditProduct() {
                     </div>
                     <input
                         type="text"
-                        value={newProduct.images[0] || ''}
+                        value={newProduct.images && newProduct.images[0] || ''}
                         onChange={(e) => handleImageChange(e, 0)}
                         className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-300"
                         placeholder="Main Image URL"

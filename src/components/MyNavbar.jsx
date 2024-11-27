@@ -104,8 +104,8 @@ function MyNavbar(props) {
               <ul className="divide-y divide-gray-300">
                 {products.map((product) => (
                   <li
-                    key={product.id}
-                    onClick={() => handleProductClick(product.id)}
+                    key={product._id}
+                    onClick={() => handleProductClick(product._id)}
                     className="cursor-pointer p-2 hover:bg-gray-100"
                   >
                     {product.name} 
@@ -192,8 +192,8 @@ function MyNavbar(props) {
                 <ul className="divide-y divide-gray-300">
                   {products.map((product) => (
                     <li
-                      key={product.id}
-                      onClick={() => handleProductClick(product.id)}
+                      key={product._id}
+                      onClick={() => handleProductClick(product._id)}
                       className="text-black  cursor-pointer p-2 hover:bg-gray-100"
                     >
                       {product.name}

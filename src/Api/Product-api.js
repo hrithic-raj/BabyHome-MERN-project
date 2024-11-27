@@ -1,13 +1,16 @@
 import axios from "axios"
-import axiosInstance, { authorization} from "./axiosInstance";
+import axiosInstance from "./axiosInstance";
 
 //mongose
-export const getProducts=()=>{
-    return axiosInstance.get('/store');
+export const getProducts=async()=>{
+    const res = await axiosInstance.get('/store');
+    return res.data.data
 }
 
-export const getProductById=(id)=>{
-    return axiosInstance.get(`store/${id}`);
+export const getProductById=async(id)=>{
+    
+    const res = await axiosInstance.get(`store/${id}`);
+    return res
 }
 
 export const getByCategory= async (category)=>{
@@ -28,48 +31,62 @@ export const getNewlyAdded = async ()=>{
 //mongose cart
 
 export const getCartById = async()=>{
-    const res= await axiosInstance.get('/cart', authorization)    
+    const res= await axiosInstance.get('/cart')    
     return res.data.data;
 }
 export const addToCart = async(productId,quantity)=>{
-    const res = await axiosInstance.post(`/cart/${productId}`,{quantity}, authorization);
+    const res = await axiosInstance.post(`/cart/${productId}`,{quantity});
     return res.data;
 }
 
 export const deleteCartItem = async(productId)=>{
-    const res = await axiosInstance.delete(`/cart/${productId}`, authorization);
+    const res = await axiosInstance.delete(`/cart/${productId}`);
     return res.data.response;
 }
 
 export const increaseCount = async(productId)=>{
     let empty = "empty"
-    const res = await axiosInstance.patch(`/cart/increase/${productId}`, empty, authorization);
+    const res = await axiosInstance.patch(`/cart/increase/${productId}`);
     return res.data.data;
 }
 export const decreaseCount = async(productId)=>{
     let empty = "empty"
-    const res = await axiosInstance.patch(`/cart/decrease/${productId}`,empty, authorization);
+    const res = await axiosInstance.patch(`/cart/decrease/${productId}`);
     return res.data.data;
 }
 
 
 // mongose order
 
-export const getOrderById=async()=>{
-    const res=await axiosInstance.get(`/orders`,authorization)
+export const getOrderById = async()=>{
+    const res=await axiosInstance.get(`/orders`)
     // console.log(res.data.data);
     return res.data.data;
 }
 
-export const createOrderById=async(addressId,paymentMethod)=>{
-    const res= await axiosInstance.post(`/orders/${addressId}`, {paymentMethod}, authorization)
+export const createOrderById = async(addressId,paymentMethod)=>{
+    const res= await axiosInstance.post(`/orders/${addressId}`, {paymentMethod})
     return res.data.data;
 }
 
 //wishlist
 
-export const getWishlistById=async()=>{
-    const res=await axiosInstance.get(`/wishlist`,authorization)
+export const getWishlistById = async()=>{
+    const res=await axiosInstance.get(`/wishlist`)
+    return res.data.data;
+}
+export const checkWishlistById = async(productId)=>{
+    const res=await axiosInstance.get(`/wishlist/check/${productId}`)
+    return res.data.data;
+}
+
+export const addToWishlist = async(productId)=>{
+    const res=await axiosInstance.post(`/wishlist/${productId}`)
+    return res.data.data;
+}
+
+export const deleteFromWishlist = async(productId)=>{
+    const res=await axiosInstance.delete(`/wishlist/${productId}`)
     return res.data.data;
 }
 

@@ -16,7 +16,7 @@ function Store() {
         .catch(err=>console.error("Error while fetching products", err))
       }else{
         getProducts()
-        .then(res=>setProducts(res.data.data))
+        .then(res=>setProducts(res))
         .catch(err=>console.error("Error while fetching products", err))
       }
       

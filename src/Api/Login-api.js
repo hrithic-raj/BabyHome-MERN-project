@@ -1,10 +1,10 @@
 import axios from "axios";
-import axiosInstance, { authorization } from "./axiosInstance";
+import axiosInstance from "./axiosInstance";
 
 //mongose
 
 export const getUser=async ()=>{
-    const res = await axiosInstance.get('/users', authorization);
+    const res = await axiosInstance.get('/users');
     return res.data.response;
 }
 
@@ -19,31 +19,31 @@ export const checkUser=async (user)=>{
 }
 
 export const getAddresses = async()=>{
-    const res= await axiosInstance.get(`/address`, authorization)
+    const res= await axiosInstance.get(`/address`)
     return res.data.data;
 }
 
 export const addAddress = async(newAddress)=>{
-    const res= await axiosInstance.post(`/address`, newAddress, authorization)
+    const res= await axiosInstance.post(`/address`, newAddress)
     return res.data.data;
 }
 
 export const updateAddress = async(addressId, newAddress)=>{
-    const res= await axiosInstance.put(`/address/${addressId}`, newAddress, authorization)
+    const res= await axiosInstance.put(`/address/${addressId}`, newAddress)
     return res.data.data;
 }
 
 export const setPrimaryAddress = async(addressId)=>{
-    const res= await axiosInstance.put(`/address/primary/${addressId}`, {}, authorization)
+    const res= await axiosInstance.put(`/address/primary/${addressId}`)
     return res.data.data;
 }
 
 export const getPrimaryAddress = async()=>{
-    const res= await axiosInstance.get(`/address/primary`, authorization)
+    const res= await axiosInstance.get(`/address/primary`)
     return res.data.data;
 }
 
 export const deleteAddress = async(addressId)=>{
-    const res= await axiosInstance.delete(`/address/${addressId}`, authorization)
+    const res= await axiosInstance.delete(`/address/${addressId}`)
     return res.data.data;
 }

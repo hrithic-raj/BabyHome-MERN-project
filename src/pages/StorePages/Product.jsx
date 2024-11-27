@@ -1,12 +1,14 @@
 import React,{useState,useEffect} from 'react'
 import MyNavbar from '../../components/MyNavbar'
-import { addToCart, getProductById } from '../../Api/Product-api';
+import { addToCart, addToWishlist, checkWishlistById, getProductById } from '../../Api/Product-api';
 import { useNavigate, useParams } from 'react-router-dom';
 import MyFooter from '../../components/MyFooter';
 import { toast } from 'react-toastify';
 
 function Product() {
   const [product, setProduct] = useState([]);
+  const [isWish, setIsWish] = useState(false);
+  const [wishlist, setWishlist] = useState([]);
   const [selectedImage, setSelectedImage] = useState("");
   const [selectedImages, setSelectedImages] = useState([]);
   const [quntity, setQuntity] = useState(1);
@@ -22,7 +24,11 @@ function Product() {
         setSelectedImages(res.data.data.images)
       })
       .catch(err=> console.error('Error fetching product data', err));
-  }, []);
+      
+    checkWishlistById(productId)
+      .then(res=>setIsWish(res))
+      .catch(err=> console.error(err));
+    },[userId, wishlist, productId]);
 
   if (!product) return <div>Loading...</div>;
 
@@ -40,8 +46,10 @@ function Product() {
     }
     
   }
-  const handleWishlist=(e)=>{
-    console.log(e.target.checked)
+  const handleWishlist=()=>{
+    addToWishlist(productId)
+      .then(res=>setWishlist(res))
+      .catch(err=>console.error(err))
   }
   return (
     <div>
@@ -53,7 +61,7 @@ function Product() {
             <div className='relative'>
               <img className='w-[500px] h-[500px]' src={selectedImage} alt="" />
               <div className='absolute top-0 left-6'>
-              <input id="heart" type="checkbox" onChange={handleWishlist}/>
+              <input id="heart" type="checkbox" checked={isWish} onChange={handleWishlist}/>
               <label htmlFor="heart">❤</label>
               </div>
             </div>

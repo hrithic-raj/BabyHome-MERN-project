@@ -1,10 +1,9 @@
 import React,{useState,useEffect, useContext} from 'react'
-import { getProductById } from '../../../Api/Product-api';
 import { useNavigate, useParams } from 'react-router-dom';
 import AdminNavbar from '../../../components/AdminNav';
 import Sidebar from '../../../components/SideBar';
 import { AuthContext } from '../../../contexts/AuthContext';
-import { deleteProductById } from '../../../Api/Admin-api';
+import { deleteProductById , getProductById} from '../../../Api/Admin-api';
 
 function ProductView() {
   const [product, setProduct] = useState([]);

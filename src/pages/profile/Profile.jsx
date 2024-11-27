@@ -233,16 +233,18 @@ function Profile() {
                                 }
                                 className="border p-2 w-full mb-2"
                             />
-                            <button
-                                type="submit"
-                                className="bg-blue-500 rounded-lg px-4 py-2 text-white"
-                            >
-                                {editId ? 'Update Address' : 'Add Address'}
-                            </button>
+                            <div className='flex gap-3'>
+                                <button
+                                    type="submit"
+                                    className="bg-blue-500 rounded-lg px-4 py-2 text-white"
+                                >
+                                    {editId ? 'Update Address' : 'Add Address'}
+                                </button>
+                                <button className='bg-red-400 rounded-lg px-4 py-2 text-white' onClick={()=>{setAddressFlag(false); setEditId(null)}}>Cencel</button>
+                            </div>
                         </form>
                     ):(
                     <button className='bg-blue-400 rounded p-2' onClick={()=>setAddressFlag(true)}>Add Address</button>
-
                     )}
                 </div>
                 </div>

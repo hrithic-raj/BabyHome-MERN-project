@@ -54,8 +54,8 @@ function Orders() {
             <div className='w-[800px] h-[600px] overflow-auto custom-scrollbar flex flex-col shadow-md p-4 border space-y-4'>
                 {userId?(
                     orders && orders.length>0? (
-                        orders.slice(0).reverse().map(orderlist=>(
-                            <div key={orderlist._id} className=' border shadow-lg flex flex-col space-y-3 p-2'> 
+                        orders.slice(0).reverse().map((orderlist, index)=>(
+                            <div key={index} className=' border shadow-lg flex flex-col space-y-3 p-2'> 
                                 <div key={orderlist.items._id} className='border flex rounded-lg'>
                                 <div className='flex flex-col items-center justify-center h-[150px] w-[150px]'>
                                     <img className='ms-2 w-28 mt-2 rounded hover:transform hover:scale-105  transition-all duration-500 ease-in-out' src={orderlist.items.productDetails[0].images && orderlist.items.productDetails[0].images[0]} alt="" />
