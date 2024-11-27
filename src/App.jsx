@@ -21,7 +21,6 @@ import TermsAndConditions from './pages/other/TermsConditions';
 import Dashboard from './pages/Admin/Dashboard/Dashboard';
 import AdminProduct from './pages/Admin/Products/AdminProduct';
 import AdminUser from './pages/Admin/Users/AdminUser';
-import Adduser from './pages/Admin/Users/AddUser';
 import AddProduct from './pages/Admin/Products/AddProduct';
 import EditProduct from './pages/Admin/Products/EditProduct';
 import ProductView from './pages/Admin/Products/ProductView';
@@ -30,13 +29,11 @@ import AdminOrder from './pages/Admin/Orders/AdminOrder';
 import PageNotFound from './pages/other/PageNotFound';
 import AdminRoute from './pages/Admin/Auth/AdminRoute';
 import UserRoute from './pages/Auth/UserRoute';
-import Test from './pages/test'
 
 function App() {
   return (
     <div className="App">
       <Routes>
-        <Route path='/test' element={<Test/>}/>
         <Route path='/signup' element={<Signup/>}/>
         <Route path='/login' element={<Login/>}/>
         <Route path='/home' element={<Home/>}/>
@@ -65,7 +62,7 @@ function App() {
           <Route path='/admin/products' element={<AdminRoute><AdminProduct/></AdminRoute>}/>
           <Route path='/admin/users' element={<AdminRoute><AdminUser/></AdminRoute>}/>
           <Route path='/admin/orders' element={<AdminRoute><AdminOrder/></AdminRoute>}/>
-          <Route path='/admin/users/adduser' element={<AdminRoute><Adduser/></AdminRoute>}/>
+          {/* <Route path='/admin/users/adduser' element={<AdminRoute><Adduser/></AdminRoute>}/> */}
           <Route path='/admin/products/addproduct' element={<AdminRoute><AddProduct/></AdminRoute>}/>
           <Route path='/admin/products/:category' element={<AdminRoute><AdminProduct/></AdminRoute>}/>
           <Route path='/admin/products/editproduct/:productId' element={<AdminRoute><AdminProduct/></AdminRoute>}/>

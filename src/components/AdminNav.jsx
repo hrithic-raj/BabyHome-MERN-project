@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { FaUser, FaSearch} from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom'
-import { getProducts } from '../Api/Product-api';
-import { getAllUsers, monogoGetAllProducts, monogoGetAllUsers } from '../Api/Admin-api';
+import { getAdmin, getAllProducts, getAllUsers } from '../Api/Admin-api';
 import { useSelector } from 'react-redux';
 
 function AdminNavbar(props) {
@@ -12,8 +11,15 @@ function AdminNavbar(props) {
     const [users, setUsers] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const navigate=useNavigate()
-    const adminId=localStorage.getItem('adminId')
-    const { admin } = useSelector((state)=>state.auth)
+    const adminId=localStorage.getItem('token')
+    // const { admin } = useSelector((state)=>state.auth)
+    const [admin, setAdmin] = useState({});
+
+    useEffect(()=>{
+      getAdmin()
+      .then(res=>setAdmin(res))
+      .catch(error=>console.error(error))
+    },[adminId])
 
     useEffect(() => {
       const fetchResults = async () => {
@@ -25,8 +31,7 @@ function AdminNavbar(props) {
         }
         try {
           // Fetch products and users simultaneously
-          const [productRes, userRes] = await Promise.all([monogoGetAllProducts(), monogoGetAllUsers()]);
-          console.log(productRes);
+          const [productRes, userRes] = await Promise.all([getAllProducts(), getAllUsers()]);
           
           // Filter products based on searchTerm
           const searchProducts = productRes.filter(product =>
@@ -116,7 +121,7 @@ function AdminNavbar(props) {
         <div>
           <button className="text-gray-600 hover:text-gray-400 flex gap-3" >
             <FaUser size={24} />
-            <span >{admin && admin.name}</span>
+            <span >{admin && admin.username}</span>
           </button>
         </div>
       </div>

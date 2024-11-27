@@ -7,7 +7,7 @@ import axios from 'axios';
 
 export const signupUser = createAsyncThunk('auth/signupUser', async (userData, {rejectWithValue})=>{
     try{
-        const res = await axios.post("http://localhost:5000/api/users/auth/signup", userData);
+        const res = await addUser(userData)
         return res.data.data;
     }catch(error){
         if(error.response && error.response.data.message){
@@ -19,7 +19,7 @@ export const signupUser = createAsyncThunk('auth/signupUser', async (userData, {
 
 export const loginUser = createAsyncThunk('auth/loginUser', async (loginData, {rejectWithValue})=>{
     try{
-        const res = await monogoCheckUser(loginData);
+        const res = await checkUser(loginData);
         const {user, token} = res.data
         if(!user){
             return rejectWithValue('Invalid Username or Password')

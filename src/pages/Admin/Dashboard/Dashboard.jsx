@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import AdminNavbar from '../../../components/AdminNav'
 import Sidebar from '../../../components/SideBar'
 import { useNavigate } from 'react-router-dom';
-import { getAllProducts, getAllUsers, getTotalOrders, getTotalSales, monogoGetAllOrders, monogoGetAllProducts, monogoGetAllUsers, monogoGetTotalRevenue } from '../../../Api/Admin-api';
+import { getAllOrders, getAllProducts, getAllUsers, getTotalOrders, getTotalRevenue, getTotalSales, monogoGetAllOrders, monogoGetAllProducts, monogoGetAllUsers, monogoGetTotalRevenue } from '../../../Api/Admin-api';
 import { getBestSeller, mongoGetBestSeller } from '../../../Api/Product-api';
 
 function Dashboard() {
@@ -16,23 +16,23 @@ function Dashboard() {
 
   useEffect(()=>{
     if(admin){
-      monogoGetAllUsers()
+      getAllUsers()
       .then((res)=>setUsers(res))
       .catch(err=>console.error(err))
       
-      monogoGetAllProducts()
+      getAllProducts()
       .then((res)=>setProducts(res))
       .catch(err=>console.error(err))
       
-      monogoGetAllOrders()
+      getAllOrders()
       .then((res)=>setTotalOrders(res))
       .catch(err=>console.error(err))
       
-      mongoGetBestSeller()
+      getBestSeller()
       .then(res=>setBestSellers(res.data))
       .catch(err=>console.error(err))
 
-      monogoGetTotalRevenue()
+      getTotalRevenue()
       .then(res=>setTotalSales(res))
       .catch(err=>console.error(err))
     }

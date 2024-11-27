@@ -1,23 +1,21 @@
 import React,{useState,useEffect} from 'react'
 import MyNavbar from '../../components/MyNavbar'
 import {useNavigate, useParams} from 'react-router-dom'
-import { getProducts ,getByCategory, mongoGetProducts, mongoGetByCategory} from '../../Api/Product-api'
+import { getProducts ,getByCategory} from '../../Api/Product-api'
 import MyFooter from '../../components/MyFooter'
 function Store() {
   const navigate= useNavigate()
   const [products,setProducts]=useState([])
   const {category}=useParams()
-  const userId =localStorage.getItem('userId')
-  const admin =localStorage.getItem('admin')
   useEffect(() => {
       if(category){
-        mongoGetByCategory(category)
+        getByCategory(category)
         .then(res=>{
           setProducts(res.data)
         })
         .catch(err=>console.error("Error while fetching products", err))
       }else{
-        mongoGetProducts()
+        getProducts()
         .then(res=>setProducts(res.data.data))
         .catch(err=>console.error("Error while fetching products", err))
       }

@@ -1,11 +1,13 @@
 import React, { useEffect, useState, useContext, useCallback} from 'react'
 import dp from '../../Assets/Main/profile.png'
 import MyNavbar from '../../components/MyNavbar'
-import { addAddress, getAddressById, getUserById, monogoGetUser } from '../../Api/Login-api'
+import { addAddress, getAddressById, getUser, getUserById, monogoGetUser } from '../../Api/Login-api'
 import { AuthContext } from '../../contexts/AuthContext'
 import { useNavigate } from 'react-router-dom'
 import { getOrderById, mongoGetOrderById } from '../../Api/Product-api'
 import MyFooter from '../../components/MyFooter'
+import { useDispatch } from 'react-redux'
+import { logout } from '../../Redux/Slices/AuthSlice'
 
 function Orders() {
     const navigate=useNavigate();
@@ -14,21 +16,21 @@ function Orders() {
     const [orders,setOrders]=useState([]);
     const [user,setUser]=useState([]);
     const [address,setAddress]=useState([]);
-    const {logout}=useContext(AuthContext)
+    const dispatch = useDispatch()
+    // const {logout}=useContext(AuthContext)
     useEffect(()=>{
-        mongoGetOrderById(userId)
+        getOrderById(userId)
         .then(res=>{
-            console.log(res)
             setOrders(res)
         })
         .catch(err=>console.error(err))
-        monogoGetUser()
+        getUser()
             .then(res=>setUser(res))
             .catch(err=>console.error(err))
     },[])
     const handleLogout=()=>{
-        logout()
-        navigate('/home')
+        dispatch(logout())
+        navigate('/login')
     }
   return (
     <div>
@@ -52,7 +54,7 @@ function Orders() {
             <div className='w-[800px] h-[600px] overflow-auto custom-scrollbar flex flex-col shadow-md p-4 border space-y-4'>
                 {userId?(
                     orders && orders.length>0? (
-                        orders.reverse().map(orderlist=>(
+                        orders.slice(0).reverse().map(orderlist=>(
                             <div key={orderlist._id} className=' border shadow-lg flex flex-col space-y-3 p-2'> 
                                 <div key={orderlist.items._id} className='border flex rounded-lg'>
                                 <div className='flex flex-col items-center justify-center h-[150px] w-[150px]'>

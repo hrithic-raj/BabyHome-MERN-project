@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Sidebar from '../../../components/SideBar';
 import AdminNavbar from '../../../components/AdminNav';
-import { addtoProduct, monogoAddProduct } from '../../../Api/Admin-api';
+import { addProduct } from '../../../Api/Admin-api';
 import { toast } from 'react-toastify';
 
 const AddProductForm = () => {
@@ -68,7 +68,7 @@ const handleChange =(e) => {
 const handleSubmit=async(e)=>{
   e.preventDefault();
   if(validateForm()){
-    monogoAddProduct(newProduct)
+    addProduct(newProduct)
     .then(()=>{
       setNewProduct({
         name:'',

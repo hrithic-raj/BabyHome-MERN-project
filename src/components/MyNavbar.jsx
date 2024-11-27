@@ -5,7 +5,7 @@ import {NavLink,useNavigate} from 'react-router-dom'
 import { AuthContext } from '../contexts/AuthContext';
 import { getUserById } from '../Api/Login-api';
 // import axios from 'axios';
-import { getCartById, getProducts } from '../Api/Product-api';
+import { getCartById, getProducts , mongoGetProducts} from '../Api/Product-api';
 
 function MyNavbar(props) {
     const [isOpen, setIsOpen] = useState(false);
@@ -35,7 +35,7 @@ function MyNavbar(props) {
         }
         try{
           const res= await getProducts();
-          const searchProducts=res.data.filter(product=>
+          const searchProducts=res.filter(product=>
             product.name.toLowerCase().includes(searchTerm.toLowerCase())
           );
           setProducts(searchProducts);
@@ -52,15 +52,6 @@ function MyNavbar(props) {
       
       return () => clearTimeout(delaySearch);
     },[searchTerm])
-
-    // useEffect(()=>{
-    //   if(userId){
-    //     getCartById(userId)
-    //     .then((res)=>{
-    //       setCart(res)
-    //     })
-    //   }
-    // },[userId,cartAddAlert,cartRemoveAlert])
     
     const handleProductClick=(id)=>{
       setShowModal(false);

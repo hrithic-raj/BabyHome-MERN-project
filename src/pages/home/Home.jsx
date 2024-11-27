@@ -47,11 +47,11 @@ function Home() {
   }
 
   useEffect(()=>{
-    mongoGetNewlyAdded()
+    getNewlyAdded()
     .then(res=>setNewlyAdded(res.data))
     .catch(err=>console.error(err))
 
-    mongoGetBestSeller()
+    getBestSeller()
     .then(res=>setBestSeller(res.data))
     .catch(err=>console.error(err))
   },[])

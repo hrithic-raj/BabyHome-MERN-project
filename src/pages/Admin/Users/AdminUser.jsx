@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import AdminNavbar from '../../../components/AdminNav'
 import Sidebar from '../../../components/SideBar'
 import { useNavigate } from 'react-router-dom'
-import { blockUserById, deleteUserById, getAllUsers, monogoBlockUserById, monogoDeleteUserById, monogoGetAllUsers, monogogetOrderCountById } from '../../../Api/Admin-api';
+import { blockUserById, deleteUserById, getAllUsers } from '../../../Api/Admin-api';
 import { toast } from 'react-toastify';
 
 function AdminUser() {
@@ -13,14 +13,17 @@ function AdminUser() {
   const admin=localStorage.getItem('admin');
   
   useEffect(()=>{
-    monogoGetAllUsers()
+    getAllUsers()
     .then((res)=>setUsers(res))
     .catch(err=>console.error(err))
   },[])
   
   const handleDel= async (id)=>{
-    await monogoDeleteUserById(id)
-    .then((res)=>setUsers(res))
+    await deleteUserById(id)
+    .then((res)=>{
+      setUsers(res)
+      toast.success("User deleted")
+    })
     .catch((error) => console.error('Error deleting product:', error));
   }
   
@@ -37,10 +40,10 @@ function AdminUser() {
   },[searchTerm,users])
 
   const handleBlock=async(id)=>{
-    await monogoBlockUserById(id)
+    await blockUserById(id)
     .then((res)=>{
       toast.success(res?"User Blocked":"User Unblocked")
-      monogoGetAllUsers()
+      getAllUsers()
       .then((res)=>{
         setUsers(res)
       })

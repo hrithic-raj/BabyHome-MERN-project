@@ -2,8 +2,8 @@ import React, { useContext, useEffect, useState } from 'react'
 import AdminNavbar from '../../../components/AdminNav'
 import Sidebar from '../../../components/SideBar'
 import { useNavigate, useParams } from 'react-router-dom'
-import { deleteProductById, getAllProducts, monogoDeleteProductById, monogoGetAllProducts } from '../../../Api/Admin-api';
-import { getByCategory, getProducts, mongoGetByCategory } from '../../../Api/Product-api';
+import { deleteProductById, getAllProducts } from '../../../Api/Admin-api';
+import { getByCategory } from '../../../Api/Product-api';
 import EditProduct from './EditProduct';
 import { AuthContext } from '../../../contexts/AuthContext';
 import { toast } from 'react-toastify';
@@ -19,7 +19,7 @@ function AdminProduct() {
   
   useEffect(()=>{
     if(category){
-      mongoGetByCategory(category)
+      getByCategory(category)
       .then(res=>{
         setProducts(res.data)
         console.log(res.data);
@@ -27,7 +27,7 @@ function AdminProduct() {
       .catch(err=>console.error(err))
     }
     else{
-      monogoGetAllProducts()
+      getAllProducts()
       .then((res)=>{
         setProducts(res)
       })
@@ -36,23 +36,10 @@ function AdminProduct() {
   },[category,isEdit])
   
   const handleDel=async (id)=>{
-    await monogoDeleteProductById(id)
+    await deleteProductById(id)
     .then((res)=>{
       setProducts(res)
       toast.success("Product Deleted")
-      // if (category) {
-      //   mongoGetByCategory(category)
-      //     .then((res) => {
-      //       setProducts(res.data); 
-      //     })
-      //     .catch((error) => console.error('Error fetching category:', error));
-      // } else {
-      //   monogoGetAllProducts()
-      //     .then((res) => {
-      //       setProducts(res.data); 
-      //     })
-      //     .catch((error) => console.error('Error fetching products:', error));
-      // }
     })
     .catch((error) => console.error('Error deleting product:', error));
   }

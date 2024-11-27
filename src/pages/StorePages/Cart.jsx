@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react'
 import MyNavbar from '../../components/MyNavbar'
 import { AuthContext } from '../../contexts/AuthContext'
-import { deleteCartById, increaseCount, decreaseCount, monogoGetCartById, monogoDeleteCartItem, monogoIncreaseCount, monogoDecreaseCount} from '../../Api/Product-api'
+import { increaseCount, decreaseCount, getCartById, deleteCartItem} from '../../Api/Product-api'
 import { useNavigate } from 'react-router-dom'
-import { getAddressById, getUserById, monogoGetPrimaryAddress, monogoGetUser } from '../../Api/Login-api'
+import { getPrimaryAddress, getUser } from '../../Api/Login-api'
 import MyFooter from '../../components/MyFooter'
 import { toast } from 'react-toastify'
 
@@ -14,19 +14,16 @@ function Cart() {
     const [user,setUser]=useState([])
     const navigate =useNavigate();
     const [cart,setCart]=useState([]);
-    const [total,setTotal]=useState(0);
-    const [oldTotal,setOldTotal]=useState(0);
     const [address,setAddress]=useState([]);
-    const [cartRemoveAlert,setCartRemoveAlert]=useState(false);
     useEffect(()=>{
         if(userId){
-            monogoGetUser()
+            getUser()
             .then(res=>setUser(res))
             .catch(err=>console.error(err))
-            monogoGetCartById()
+            getCartById()
             .then(res=>setCart(res))
             .catch(err=>console.error(err.response.data))
-            monogoGetPrimaryAddress()
+            getPrimaryAddress()
             .then(res=>setAddress(res))
             .catch(err=>console.error(err))
         }
@@ -34,25 +31,21 @@ function Cart() {
     
     const removeFromCart=async(productId)=>{
          
-        await monogoDeleteCartItem(productId)
+        await deleteCartItem(productId)
         .then(res=>{
             setCart(res)
             toast.success("Product Removed From Cart",{position:'bottom-left'});
-            setCartRemoveAlert(true);
-            setTimeout(() => {
-                setCartRemoveAlert(false)
-            },3000);
         })
         .catch(err=>console.error(err))
     }
     
     const handleAddCount=(productId)=>{
-        monogoIncreaseCount(productId)
+        increaseCount(productId)
         .then(res=>setCart(res))
         .catch(err=>console.error(err))
     }
     const handleSubCount=(productId)=>{
-       monogoDecreaseCount(productId)
+       decreaseCount(productId)
         .then(res=>setCart(res))
         .catch(err=>console.error(err))
     }
@@ -67,7 +60,7 @@ function Cart() {
   return (
     <>
          <div>
-             <MyNavbar cartRemoveAlert={cartRemoveAlert}/>
+             <MyNavbar/>
             <div className='mt-[150px] flex flex-wrap justify-center space-x-0 xl:space-x-5 space-y-5 xl:space-y-0 mb-10'>
                 <div className='border w-[60%] p-2 shadow-lg'>
                     <div className='border shadow-lg '>
@@ -94,7 +87,7 @@ function Cart() {
                     </div>
                     <div className=' h-[430px] overflow-auto custom-scrollbar'>
                     {cart && cart.products && cart.products.length>0?(
-                         cart.products.map(item=>(
+                         cart.products.slice(0).reverse().map(item=>(
                              
                              <div key={item.productId._id} className='flex flex-wrap mt-3 ms-2 mb-1'>
                             <div className='w-[200px] flex flex-col justify-center items-center mt-3 mb-3'>

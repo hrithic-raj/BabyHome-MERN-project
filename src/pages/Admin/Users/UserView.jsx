@@ -1,14 +1,14 @@
 import React, { useEffect, useState, useContext} from 'react'
 import dp from '../../../Assets/Main/profile.png'
 import MyNavbar from '../../../components/MyNavbar'
-import { addAddress, getAddressById, getUserById } from '../../../Api/Login-api'
+import { addAddress, getAddressById } from '../../../Api/Login-api'
 import { AuthContext } from '../../../contexts/AuthContext'
 import { useNavigate, useParams } from 'react-router-dom'
 import MyFooter from '../../../components/MyFooter'
 import AdminNavbar from '../../../components/AdminNav'
 import Sidebar from '../../../components/SideBar'
 import { getOrderById, mongoGetOrderById } from '../../../Api/Product-api'
-import { adminGetOrdersById, monogoBlockUserById, monogoDeleteUserById, monogoGetUserById } from '../../../Api/Admin-api'
+import { adminGetOrdersById, blockUserById, deleteUserById, getUserById} from '../../../Api/Admin-api'
 import { toast } from 'react-toastify'
 
 function UserView() {
@@ -21,7 +21,7 @@ function UserView() {
     const [userOrders,setUserOrders]=useState(false);
     const {userId}=useParams()
     useEffect(()=>{
-        monogoGetUserById(userId)
+        getUserById(userId)
         .then(res=>setUser(res))
         .catch(err=>console.error(err))
         adminGetOrdersById(userId)
@@ -39,19 +39,20 @@ function UserView() {
         setUserDetails(false)
     }
     const handleBlock=async(id)=>{
-        await monogoBlockUserById(id)
+        await blockUserById(id)
         .then((res)=>{
           toast.success(res?"User Blocked":"User Unblocked")
-          monogoGetUserById(userId)
+          getUserById(userId)
             .then(res=>setUser(res))
             .catch(err=>console.error(err))
         })
     }
     const handleDel= async (id)=>{
-        await monogoDeleteUserById(id)
+        await deleteUserById(id)
         .then((res)=>{
+            toast.success("User deleted");
             setTimeout(() => {
-                navigate('/admin/users')
+                navigate('/admin/users');
               }, 1000);
         })
         .catch((error) => console.error('Error deleting product:', error));

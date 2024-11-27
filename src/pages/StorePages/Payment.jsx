@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import MyNavbar from '../../components/MyNavbar'
-import { getCartById, deleteCartById, increaseCount, decreaseCount, ClearCart, addToOrder, monogoGetCartById, monogoIncreaseCount, monogoDecreaseCount, monogoDeleteCartItem, mongoCreateOrderById} from '../../Api/Product-api'
+import { getCartById, deleteCartItem, createOrderById, increaseCount, decreaseCount} from '../../Api/Product-api'
 import gpay from '../../Assets/Main/gpay.png'
 import paytm from '../../Assets/Main/paytm.png'
-import { getAddressById, getUserById, monogoGetPrimaryAddress, monogoGetUser } from '../../Api/Login-api'
+import { getPrimaryAddress, getUser } from '../../Api/Login-api'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 
@@ -12,49 +12,23 @@ function Payment() {
     const userId=localStorage.getItem('userId')
     const navigate =useNavigate()
     const [cart,setCart]=useState([])
-    const [total,setTotal]=useState(0);
     const [user,setUser]=useState([]);
     const [address,setAddress]=useState([]);
-    const [oldTotal,setOldTotal]=useState(0);
-    // const [orderPlacedAlert,setOrderPlacedAlert]=useState(false)
-    // const [cartEmptyAlert,setCartEmptyAlert]=useState(false)
-    // const [paymentOptionAlert,setPaymentOptionAlert]=useState(false)
-
-    // useEffect(()=>{
-    //     if((cart.reduce((acc,value)=>acc+value.totalprice,0))>499){
-    //         setTotal(cart.reduce((acc,value)=>acc+value.totalprice,20))
-    //         setOldTotal(cart.reduce((acc,value)=>acc+value.oldtotalprice,0))
-    //     }
-    //     else{
-    //         setTotal(cart.reduce((acc,value)=>acc+value.totalprice,60))
-    //         setOldTotal(cart.reduce((acc,value)=>acc+value.oldtotalprice,0))
-    //     }
-    // },[cart])
     useEffect(()=>{
-        // getCartById(userId)
-        // .then(res=>setCart(res))
-        // .catch(err=>console.error(err))
-        // getUserById(userId)
-        // .then(res=>setUser(res.data))
-        // .catch(err=>console.error(err))
-        // getAddressById(userId)
-        // .then(res=>setAddress(res))
-        // .catch(err=>console.error(err))
-
-        monogoGetUser()
+        getUser()
             .then(res=>setUser(res))
             .catch(err=>console.error(err))
-        monogoGetCartById()
+        getCartById()
             .then(res=>setCart(res))
             .catch(err=>console.error(err.response.data))
-        monogoGetPrimaryAddress()
+        getPrimaryAddress()
             .then(res=>setAddress(res))
             .catch(err=>console.error(err))
     },[userId])
     
     const removeFromCart=async(productId)=>{
          
-        await monogoDeleteCartItem(productId)
+        await deleteCartItem(productId)
         .then(res=>{
             setCart(res)
             toast.success("Product Removed From Cart",{position:'bottom-left'});
@@ -63,12 +37,12 @@ function Payment() {
     }
     
     const handleAddCount=(productId)=>{
-        monogoIncreaseCount(productId)
+        increaseCount(productId)
         .then(res=>setCart(res))
         .catch(err=>console.error(err))
     }
     const handleSubCount=(productId)=>{
-       monogoDecreaseCount(productId)
+       decreaseCount(productId)
         .then(res=>setCart(res))
         .catch(err=>console.error(err))
     }
@@ -81,7 +55,7 @@ function Payment() {
   const handleOrder = async () => {
       // e.preventDefault();
     if(cart.products && cart.products.length>0 && selectedOption && address.city){
-        mongoCreateOrderById(address._id,selectedOption)
+        createOrderById(address._id,selectedOption)
         .then((res)=>{
             toast.success("Order Placed",{position:'bottom-left'})
             setTimeout(() => {

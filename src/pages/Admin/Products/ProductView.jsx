@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import AdminNavbar from '../../../components/AdminNav';
 import Sidebar from '../../../components/SideBar';
 import { AuthContext } from '../../../contexts/AuthContext';
-import { deleteProductById, monogoDeleteProductById, monogoGetProductById } from '../../../Api/Admin-api';
+import { deleteProductById } from '../../../Api/Admin-api';
 
 function ProductView() {
   const [product, setProduct] = useState([]);
@@ -15,7 +15,7 @@ function ProductView() {
   const {isEdit,setIsEdit}=useContext(AuthContext)
 
   useEffect(() => {
-    monogoGetProductById(productId)
+    getProductById(productId)
       .then(res => {
         setProduct(res);
         setSelectedImage(res.images[0]);
@@ -33,7 +33,7 @@ function ProductView() {
     }, 1000);
   }
   const handleDel=(id)=>{
-    monogoDeleteProductById(id)
+    deleteProductById(id)
     .then(()=>{
         setTimeout(() => {
             navigate(`/admin/products`)

@@ -2,20 +2,20 @@ import React, { useEffect, useState } from 'react'
 import AdminNavbar from '../../../components/AdminNav'
 import Sidebar from '../../../components/SideBar'
 import { useNavigate} from 'react-router-dom'
-import { getTotalOrders, getTotalSales, monogoGetAllOrders } from '../../../Api/Admin-api';
+import { getAllOrders, getTotalRevenue } from '../../../Api/Admin-api';
 
 function AdminOrder() {
   const [orders,setOrders]=useState([]);
   const [totalSales,setTotalSales]=useState(0);
   
   useEffect(()=>{
-    monogoGetAllOrders()
+    getAllOrders()
     .then((res)=>setOrders(res))
     .catch((error) => console.error(error));
 
-    getTotalSales()
-    .then(res=>setTotalSales(res))
-    .catch((error) => console.error(error));
+    getTotalRevenue()
+      .then(res=>setTotalSales(res))
+      .catch(err=>console.error(err))
   },[])
 
   return (
@@ -52,7 +52,7 @@ function AdminOrder() {
                       {orders.length>0 && orders.map(order=>(
                          
                         <div key={order.id} className='grid grid-cols-5 space-x-3 justify-items-center w-[700px] md:w-full'>
-                              <span>{order.user[0].name}</span>
+                              <span>{order.user[0].username}</span>
                               <span>{order._id}</span>
                               <span>{order.createdAt}</span>
                                 <span>{order.items.productDetails[0].name}</span>

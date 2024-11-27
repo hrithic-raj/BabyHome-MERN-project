@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext} from 'react'
 import dp from '../../Assets/Main/profile.png'
 import MyNavbar from '../../components/MyNavbar'
-import { addAddress, getAddressById, getUserById, monogoAddAddress, monogoDeleteAddress, monogoGetAddresses, monogoGetUser, monogoSetPrimaryAddress, monogoUpdateAddress } from '../../Api/Login-api'
+import { addAddress, deleteAddress, getAddresses, getUser, setPrimaryAddress, updateAddress } from '../../Api/Login-api'
 import { AuthContext } from '../../contexts/AuthContext'
 import { useNavigate } from 'react-router-dom'
 import MyFooter from '../../components/MyFooter'
@@ -27,10 +27,10 @@ function Profile() {
     useEffect(()=>{
         const userId=localStorage.getItem('token')
         if(userId){
-            monogoGetUser()
+            getUser()
             .then(res=>setUser(res))
             .catch(err=>console.error(err))
-            monogoGetAddresses()
+            getAddresses()
             .then(res=>setAddresses(res))
             .catch(err=>console.error(err))
         }else{
@@ -42,12 +42,12 @@ function Profile() {
 
     const handleLogout=()=>{
         dispatch(logout())
-        navigate('/home')
+        navigate('/login')
     }
     const handleAddOrEdit =(e)=>{
         e.preventDefault()
         if(editId){
-            monogoUpdateAddress(editId, newAddress)
+            updateAddress(editId, newAddress)
             .then(res=>{
                 setAddresses(res.allAddress)
                 setNewAddress({
@@ -63,7 +63,7 @@ function Profile() {
             })
             .catch(err=> console.error(err))
         }else{
-            monogoAddAddress(newAddress)
+            addAddress(newAddress)
             .then(res=>{
                 setAddresses(res.allAddress)
                 setNewAddress({
@@ -80,17 +80,15 @@ function Profile() {
         }
     }
     const handleDelete =(addressId)=>{
-        monogoDeleteAddress(addressId)
+        deleteAddress(addressId)
         .then(res=>setAddresses(res.allAddress))
         .catch(err=> console.error(err))
     }
     const handleSetPrimary =(addressId)=>{
-        monogoSetPrimaryAddress(addressId)
+        setPrimaryAddress(addressId)
         .then(res=>setAddresses(res.allAddress))
         .catch(err=> console.error(err))
-    }
-    // console.log(user);
-    
+    }    
     
   return (
     <div>

@@ -1,6 +1,6 @@
 import React,{useState,useEffect} from 'react'
 import MyNavbar from '../../components/MyNavbar'
-import { addToCart, getProductById, mongoGetProductById, monogoAddToCart } from '../../Api/Product-api';
+import { addToCart, getProductById } from '../../Api/Product-api';
 import { useNavigate, useParams } from 'react-router-dom';
 import MyFooter from '../../components/MyFooter';
 import { toast } from 'react-toastify';
@@ -13,11 +13,10 @@ function Product() {
   const navigate=useNavigate();
   const userId=localStorage.getItem('token')
   const {productId}=useParams()
-  const [cartAddAlert,setCartAddAlert]=useState(false)
 
   useEffect(() => {
-    mongoGetProductById(productId)
-      .then(res => {
+    getProductById(productId)
+      .then(res =>{
         setProduct(res.data.data);
         setSelectedImage(res.data.data.images[0]);
         setSelectedImages(res.data.data.images)
@@ -30,13 +29,9 @@ function Product() {
 
   const handleCart=()=>{
     if(userId){
-      monogoAddToCart(productId,quntity)
+      addToCart(productId,quntity)
       .then(res=>{
         toast.success("Cart Updated",{position:'bottom-left'})
-        setCartAddAlert(true)
-        setTimeout(() => {
-          setCartAddAlert(false)
-        }, 3000);
       })
       .catch(err=>console.error(err))
     }
@@ -50,7 +45,7 @@ function Product() {
   }
   return (
     <div>
-      <MyNavbar cartAddAlert={cartAddAlert}/>
+      <MyNavbar/>
       <div className='mt-[150px] mb-[100px]'>
         <div className='grid grid-cols-1 space-y-10 xl:space-y-0 xl:grid-cols-2 h-max'>
           <div className='flex xl:ms-20 space-x-30 ms-5 w-[700px]'>
