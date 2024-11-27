@@ -78,8 +78,9 @@ export const monogoGetProductById = async(productId)=>{
     return res.data.data;
 }
 
-export const monogoAddProduct = async()=>{
-    const res= await axiosInstance.post(`/admin/products`, authorization)
+export const monogoAddProduct = async(productData)=>{
+    
+    const res= await axiosInstance.post(`/admin/products`, {productData}, authorization)
     return res.data.data;
 }
 

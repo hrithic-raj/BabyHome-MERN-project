@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import AdminNavbar from '../../../components/AdminNav';
 import Sidebar from '../../../components/SideBar';
 import { AuthContext } from '../../../contexts/AuthContext';
-import { deleteProductById } from '../../../Api/Admin-api';
+import { deleteProductById, monogoDeleteProductById, monogoGetProductById } from '../../../Api/Admin-api';
 
 function ProductView() {
   const [product, setProduct] = useState([]);
@@ -15,11 +15,11 @@ function ProductView() {
   const {isEdit,setIsEdit}=useContext(AuthContext)
 
   useEffect(() => {
-    getProductById(productId)
+    monogoGetProductById(productId)
       .then(res => {
-        setProduct(res.data);
-        setSelectedImage(res.data.images[0]);
-        setSelectedImages(res.data.images)
+        setProduct(res);
+        setSelectedImage(res.images[0]);
+        setSelectedImages(res.images)
       })
       .catch(err=> console.error('Error fetching product data', err));
   }, [productId]);
@@ -33,7 +33,7 @@ function ProductView() {
     }, 1000);
   }
   const handleDel=(id)=>{
-    deleteProductById(id)
+    monogoDeleteProductById(id)
     .then(()=>{
         setTimeout(() => {
             navigate(`/admin/products`)
@@ -82,8 +82,8 @@ function ProductView() {
                     )
                   )}
                 </div>
-              <button className='text-xl mt-10 w-[300px] bg-sky-400 h-10 rounded' onClick={()=>handleEdit(product.id)}>EDIT</button>
-              <button className='text-xl mt-3 w-[300px] bg-red-400 h-10 rounded' onClick={()=>handleDel(product.id)}>DELETE</button>
+              <button className='text-xl mt-10 w-[300px] bg-sky-400 h-10 rounded' onClick={()=>handleEdit(product._id)}>EDIT</button>
+              <button className='text-xl mt-3 w-[300px] bg-red-400 h-10 rounded' onClick={()=>handleDel(product._id)}>DELETE</button>
             </div>
           </div>
         </div>

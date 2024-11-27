@@ -24,6 +24,9 @@ export const loginUser = createAsyncThunk('auth/loginUser', async (loginData, {r
         if(!user){
             return rejectWithValue('Invalid Username or Password')
         }
+        if(user.block){
+            return rejectWithValue('User Blocked, Contact Admin')
+        }
         return res.data
     }catch(error){
         if(error.response && error.response.data.message){

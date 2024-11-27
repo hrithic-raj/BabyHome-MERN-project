@@ -56,15 +56,23 @@ function AdminUser() {
           <Sidebar/>
           <div className='lg:ms-20 flex flex-col items-center justify-center'>
           <div className='mb-[13vh] grid grid-cols-1 mt-4 md:grid-cols-4 lg:grid-cols-8 lg:grid-rows-3 md:gap-6 gap-y-3 order-1 justify-items-center'>
-              <div className=' w-[330px] h-[200px] p-6 bg-white rounded-lg shadow-lg md:col-span-2 flex justify-between cursor-pointer' onClick={()=>navigate("/admin/users/adduser")}>
+              {/* <div className=' w-[330px] h-[200px] p-6 bg-white rounded-lg shadow-lg md:col-span-2 flex justify-between cursor-pointer' onClick={()=>navigate("/admin/users/adduser")}>
                 <div>
                   <div className="text-black text-3xl font-bold mt-2">Add User</div>
                 </div>
                 <div>
                   <img src="https://cdn-icons-png.flaticon.com/512/863/863823.png" className='w-[120px] mt-5' alt="" />
                 </div>
+              </div> */}
+              <div className=' w-[330px] h-[200px] p-6 bg-white rounded-lg shadow-lg md:col-span-2 lg:row-span-2 flex justify-between order-2 lg-order-3'>
+              <div>
+                  <div className="text-green-600 font-bold">Total Users</div>
+                  <div className="text-3xl font-semibold">{users.length}</div>
+                </div>
+                <div>
+                  <img src="https://cdn-icons-png.flaticon.com/512/1165/1165725.png" className='w-[130px] mt-3' alt="" />
+                </div>
               </div>
-              
               <div className='max-h-[550px] min-h-[400px] w-[330px] md:w-full p-2 bg-white rounded-lg shadow-lg md:col-span-4 md:row-span-4 lg:col-span-6 lg:row-span-3 order-3 lg:order-2'>
                 
                 <div className='flex flex-col items-center h-[100px] border-b-2'>
@@ -98,7 +106,7 @@ function AdminUser() {
                 </div>
               </div>
               
-              <div className=' w-[330px] h-[200px] p-6 bg-white rounded-lg shadow-lg md:col-span-2 lg:row-span-2 flex justify-between order-2 lg-order-3'>
+              {/* <div className=' w-[330px] h-[200px] p-6 bg-white rounded-lg shadow-lg md:col-span-2 lg:row-span-2 flex justify-between order-2 lg-order-3'>
               <div>
                   <div className="text-green-600 font-bold">Total Users</div>
                   <div className="text-3xl font-semibold">{users.length}</div>
@@ -106,7 +114,7 @@ function AdminUser() {
                 <div>
                   <img src="https://cdn-icons-png.flaticon.com/512/1165/1165725.png" className='w-[130px] mt-3' alt="" />
                 </div>
-              </div>
+              </div> */}
           </div>
           </div>
         </div>

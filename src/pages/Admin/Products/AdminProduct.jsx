@@ -2,8 +2,8 @@ import React, { useContext, useEffect, useState } from 'react'
 import AdminNavbar from '../../../components/AdminNav'
 import Sidebar from '../../../components/SideBar'
 import { useNavigate, useParams } from 'react-router-dom'
-import { deleteProductById, getAllProducts } from '../../../Api/Admin-api';
-import { getByCategory, getProducts } from '../../../Api/Product-api';
+import { deleteProductById, getAllProducts, monogoDeleteProductById, monogoGetAllProducts } from '../../../Api/Admin-api';
+import { getByCategory, getProducts, mongoGetByCategory } from '../../../Api/Product-api';
 import EditProduct from './EditProduct';
 import { AuthContext } from '../../../contexts/AuthContext';
 import { toast } from 'react-toastify';
@@ -19,37 +19,40 @@ function AdminProduct() {
   
   useEffect(()=>{
     if(category){
-      getByCategory(category)
+      mongoGetByCategory(category)
       .then(res=>{
         setProducts(res.data)
+        console.log(res.data);
       })
+      .catch(err=>console.error(err))
     }
     else{
-      getAllProducts()
+      monogoGetAllProducts()
       .then((res)=>{
-        setProducts(res.data)
+        setProducts(res)
       })
+      .catch(err=>console.error(err))
     }
   },[category,isEdit])
   
-  const handleDel=(id)=>{
-    deleteProductById(id)
-    .then(()=>{
-      // console.log('Product Deleted')
+  const handleDel=async (id)=>{
+    await monogoDeleteProductById(id)
+    .then((res)=>{
+      setProducts(res)
       toast.success("Product Deleted")
-      if (category) {
-        getByCategory(category)
-          .then((res) => {
-            setProducts(res.data); 
-          })
-          .catch((error) => console.error('Error fetching category:', error));
-      } else {
-        getAllProducts()
-          .then((res) => {
-            setProducts(res.data); 
-          })
-          .catch((error) => console.error('Error fetching products:', error));
-      }
+      // if (category) {
+      //   mongoGetByCategory(category)
+      //     .then((res) => {
+      //       setProducts(res.data); 
+      //     })
+      //     .catch((error) => console.error('Error fetching category:', error));
+      // } else {
+      //   monogoGetAllProducts()
+      //     .then((res) => {
+      //       setProducts(res.data); 
+      //     })
+      //     .catch((error) => console.error('Error fetching products:', error));
+      // }
     })
     .catch((error) => console.error('Error deleting product:', error));
   }
@@ -121,16 +124,16 @@ function AdminProduct() {
                         <span className='md:text-lg text-md font-semibold'>DELETE</span>
                     </div>
                     <div className='h-[270px] md:h-[600px]'>
-                      {filteredProducts.slice(0).reverse().map(product=>(
-                        <div key={product.id} className='grid grid-cols-8 space-x-3 justify-items-center items-center w-[700px] md:w-full'>
-                          <img className='w-[70px] cursor-pointer' onClick={()=>handleProductClick(product.id)} src={product.images[0]} alt="" />
-                          <span onClick={()=>handleProductClick(product.id)} className='cursor-pointer'>{product.name}</span>
+                      {filteredProducts && filteredProducts.reverse().map(product=>(
+                        <div key={product._id} className='grid grid-cols-8 space-x-3 justify-items-center items-center w-[700px] md:w-full'>
+                          <img className='w-[70px] cursor-pointer' onClick={()=>handleProductClick(product._id)} src={product.images[0]} alt="" />
+                          <span onClick={()=>handleProductClick(product._id)} className='cursor-pointer'>{product.name}</span>
                           <span className='max-w-[100px] max-h-[50px] overflow-hidden'>{product.description}</span>
                           {product.bestseller?<img className='w-10' src="https://cdn-icons-png.flaticon.com/512/2851/2851399.png" alt="" />:<img className='w-10' src="" alt="" />}
                           {product.newlyadded?<img className='w-10' src="https://cdn-icons-png.flaticon.com/512/891/891509.png" alt="" />:<img className='w-10' src="" alt="" />}
                           <span>{product.category}</span>
-                          <button className='text-white bg-blue-300 p-2 rounded-md ' onClick={()=>handleEdit(product.id)}>EDIT</button>
-                          <button className='text-white bg-red-400 p-2 rounded-md' onClick={()=>handleDel(product.id)}>DELETE</button>
+                          <button className='text-white bg-blue-300 p-2 rounded-md ' onClick={()=>handleEdit(product._id)}>EDIT</button>
+                          <button className='text-white bg-red-400 p-2 rounded-md' onClick={()=>handleDel(product._id)}>DELETE</button>
                         </div>
                       ))}
                     </div>
@@ -140,7 +143,7 @@ function AdminProduct() {
               <div className=' w-[330px] h-[200px] p-6 bg-white rounded-lg shadow-lg md:col-span-2 lg:row-span-2 flex justify-between order-2 lg-order-3'>
               <div>
                   <div className="text-green-600 font-bold">Total Products</div>
-                  <div className="text-3xl font-semibold">{products.length}</div>
+                  <div className="text-3xl font-semibold">{products && products.length}</div>
                 </div>
                 <div>
                 <img src="https://cdn-icons-png.flaticon.com/512/10112/10112502.png" className='w-[130px] mt-4' alt="" />

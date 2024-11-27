@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { AuthContext } from '../../../contexts/AuthContext'
-import { addtoProduct, editProduct } from '../../../Api/Admin-api';
+import { addtoProduct, editProduct, monogoGetProductById, monogoUpdataProductById } from '../../../Api/Admin-api';
 import { getProductById } from '../../../Api/Product-api';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -29,8 +29,8 @@ function EditProduct() {
             const fetchProduct = async () => {
                 if(productId){
                   try{
-                    const res=await getProductById(productId)
-                    setNewProduct(res.data)
+                    const res=await monogoGetProductById(productId)
+                    setNewProduct(res)
                     setLoading(false)
                 }
                 catch (err) {
@@ -101,12 +101,12 @@ function EditProduct() {
         e.preventDefault();
         if(validateForm()){
             try{
-                await editProduct(productId, newProduct);
+                await monogoUpdataProductById(productId, newProduct);
                 setTimeout(() => {
                     setIsEdit(!isEdit);
                     toast.success("Product Updated")
                 }, 1000);
-                console.log('Product edited', newProduct);
+                // console.log('Product edited', newProduct);
             }
             catch (err) {
                 console.error('Error editing product:', err);
