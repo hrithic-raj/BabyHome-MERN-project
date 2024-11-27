@@ -2,19 +2,20 @@ import React, { useEffect, useState } from 'react'
 import AdminNavbar from '../../../components/AdminNav'
 import Sidebar from '../../../components/SideBar'
 import { useNavigate} from 'react-router-dom'
-import { getTotalOrders, getTotalSales } from '../../../Api/Admin-api';
+import { getTotalOrders, getTotalSales, monogoGetAllOrders } from '../../../Api/Admin-api';
 
 function AdminOrder() {
   const [orders,setOrders]=useState([]);
   const [totalSales,setTotalSales]=useState(0);
   
   useEffect(()=>{
-    getTotalOrders()
-    .then((res)=>{
-      setOrders(res)
-    })
+    monogoGetAllOrders()
+    .then((res)=>setOrders(res))
+    .catch((error) => console.error(error));
+
     getTotalSales()
     .then(res=>setTotalSales(res))
+    .catch((error) => console.error(error));
   },[])
 
   return (
@@ -48,21 +49,15 @@ function AdminOrder() {
                         <span className='md:text-lg text-md font-semibold'>IMAGE</span>
                     </div>
                     <div className='h-[270px] md:h-[600px] space-y-5'>
-                      {orders.slice(1).reverse().map(order=>(
+                      {orders.length>0 && orders.map(order=>(
                          
                         <div key={order.id} className='grid grid-cols-5 space-x-3 justify-items-center w-[700px] md:w-full'>
-                              <span>{order.user}</span>
-                              <span>{order.id}</span>
-                              <span>{order.date.day}</span>
-                              <div className=' col-span-2 place-self-end space-y-5'>
-                              {order.item.map(item=>(
-                                <div key={item.id} className='grid grid-cols-2 justify-items-end'>
-                                <span>{item.name}</span>
-                                <img className='w-[70px]' src={item.images[0]} alt="" />
-                                </div>
-                              ))}
-                              </div>
-                            </div>
+                              <span>{order.user[0].name}</span>
+                              <span>{order._id}</span>
+                              <span>{order.createdAt}</span>
+                                <span>{order.items.productDetails[0].name}</span>
+                                <img className='w-[70px]' src={order.items.productDetails[0].images[0]} alt="" />
+                        </div>
                       ))}
                     </div>
                 </div>

@@ -112,10 +112,9 @@ export const monogoGetAllOrders = async()=>{
     const res= await axiosInstance.get(`/admin/orders`, authorization)
     return res.data.data;
 }
+
 export const adminGetOrdersById = async(userId)=>{
-    const res= await axiosInstance.get(`/admin/orders/${userId}`, authorization)
-    console.log(res.data.data);
-    
+    const res= await axiosInstance.get(`/admin/orders/${userId}`, authorization) 
     return res.data.data;
 }
 

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { FaUser, FaSearch} from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom'
 import { getProducts } from '../Api/Product-api';
-import { getAllUsers } from '../Api/Admin-api';
+import { getAllUsers, monogoGetAllProducts, monogoGetAllUsers } from '../Api/Admin-api';
 import { useSelector } from 'react-redux';
 
 function AdminNavbar(props) {
@@ -25,7 +25,8 @@ function AdminNavbar(props) {
         }
         try {
           // Fetch products and users simultaneously
-          const [productRes, userRes] = await Promise.all([getProducts(), getAllUsers()]);
+          const [productRes, userRes] = await Promise.all([monogoGetAllProducts(), monogoGetAllUsers()]);
+          console.log(productRes);
           
           // Filter products based on searchTerm
           const searchProducts = productRes.data.filter(product =>
