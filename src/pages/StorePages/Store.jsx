@@ -1,33 +1,46 @@
 import React,{useState,useEffect} from 'react'
 import MyNavbar from '../../components/MyNavbar'
-import {useNavigate, useParams} from 'react-router-dom'
+import {useNavigate, useParams, useSearchParams} from 'react-router-dom'
 import { getProducts ,getByCategory} from '../../Api/Product-api'
 import MyFooter from '../../components/MyFooter'
 function Store() {
   const navigate= useNavigate()
   const [products,setProducts]=useState([])
   const {category}=useParams()
+  const [totalPages, setTotalPages] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const limit = 8;
   useEffect(() => {
-      if(category){
-        getByCategory(category)
-        .then(res=>{
-          setProducts(res.data)
-        })
-        .catch(err=>console.error("Error while fetching products", err))
-      }else{
-        getProducts()
-        .then(res=>setProducts(res))
-        .catch(err=>console.error("Error while fetching products", err))
-      }
-      
-  }, []);
- 
+    const page = parseInt(searchParams.get('page')) || 1;
+    setCurrentPage(page);
+
+    if(category){
+      getByCategory(category, page, limit)
+      .then(res=>{
+        setProducts(res.products);
+        setTotalPages(res.totalPages);
+      })
+      .catch(err=>console.error("Error while fetching products", err))
+    }else{
+      getProducts(page, limit)
+      .then(res=>{
+        setTotalPages(res.totalPages);
+        setProducts(res.products)
+      })
+      .catch(err=>console.error("Error while fetching products", err))
+    }
+  }, [category, searchParams]);
+  
   if (!products) {
     return <div>Loading...</div>;
   }
   
   const handleProduct=(productId)=>{
       navigate(`/store/product/${productId}`)
+  }
+  const handlePageChange=(page)=>{
+    setSearchParams({page});
   }
   return (
     <div>
@@ -58,6 +71,21 @@ function Store() {
                 </div>
               </div>
               ))}
+          </div>
+          {/* pagination control */}
+          <div className='flex justify-center mt-10'>
+              {[...Array(totalPages)].map((_,index)=>(
+                <button 
+                  key={index}
+                  onClick={()=>handlePageChange(index+1)} 
+                  className={`px-3 py-1 mx-1 border ${
+                    currentPage === index + 1 ? 'bg-blue-500 text-white' : 'bg-gray-200'
+                  }`}
+                >
+                  {index + 1}
+                </button>
+              ))
+              }
           </div>
       </div>
       <MyFooter/>

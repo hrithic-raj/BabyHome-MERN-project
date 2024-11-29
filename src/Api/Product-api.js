@@ -2,8 +2,8 @@ import axios from "axios"
 import axiosInstance from "./axiosInstance";
 
 //mongose
-export const getProducts=async()=>{
-    const res = await axiosInstance.get('/store');
+export const getProducts=async(page, limit)=>{
+    const res = await axiosInstance.get(`/store?page=${page}&limit=${limit}`);
     return res.data.data
 }
 
@@ -13,9 +13,9 @@ export const getProductById=async(id)=>{
     return res
 }
 
-export const getByCategory= async (category)=>{
-    const res = await axiosInstance.get(`/store?category=${category}`)
-    return res.data
+export const getByCategory= async (category, page, limit)=>{
+    const res = await axiosInstance.get(`/store?category=${category}&page=${page}&limit=${limit}`)
+    return res.data.data
 }
 
 export const getBestSeller = async ()=>{
