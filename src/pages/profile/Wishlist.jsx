@@ -10,6 +10,8 @@ import { useDispatch } from 'react-redux'
 import { logout } from '../../Redux/Slices/AuthSlice'
 import { toast } from 'react-toastify'
 
+//this code is responsible for wishlist
+
 function Wishlist() {
     const navigate=useNavigate();
     const [profilePic,setProfilePic]=useState(dp)
@@ -81,7 +83,7 @@ function Wishlist() {
           >
             <img
               src={item.images[0]}
-              alt={item.name}
+              alt={item.name}    
               className="w-full h-44 object-cover"
             />
             <div className="p-3">

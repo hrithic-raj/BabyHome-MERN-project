@@ -17,6 +17,7 @@ function Login() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const { user, admin, error} = useSelector((state)=>state.auth)
+    const [showPassword, setShowPassword] = useState(false)
 
     const formik=useFormik({
         initialValues: {
@@ -28,7 +29,9 @@ function Login() {
             const resultAction = await dispatch(loginUser(values))
         }
     })
-
+    const togglePasswordVisibility = () =>{
+        setShowPassword(prev=>!prev);
+    }
     useEffect(()=>{
         if(user){
           navigate('/home')
@@ -44,17 +47,22 @@ function Login() {
         <div className='mt-[130px] flex items-center justify-center'>
             <div className='border w-[500px] h-[550px] flex flex-col items-center justify-center space-y-2 p-5'>
                 <span className='text-3xl font-bold mb-10'>LOGIN</span>
-            <form className='login-form w-[500px] flex flex-col items-center space-y-5' onSubmit={formik.handleSubmit} >
-                {error && <div className="text-red-500">{error}</div>}
-                <label htmlFor="username" className='w-[300px] text text-left'>Username</label>
-                <input  className='w-[300px] h-[35px] rounded ps-5 bg-blue-50 border-2 border-blue-200' name='username' type="text" value={formik.values.username} onChange={formik.handleChange} onBlur={formik.handleBlur} placeholder='Enter your Username'/>
-                {formik.touched.username && formik.errors.username && <div className="text-red-500">{formik.errors.username}</div>}
-                <label htmlFor="password" className='w-[300px] text-left'>Password</label>
-                <input  className='w-[300px] h-[35px] rounded ps-5 bg-blue-50 border-2 border-blue-200' name='password' type="password" value={formik.values.password} onChange={formik.handleChange} onBlur={formik.handleBlur} placeholder='Enter Your Password'/>
-                {formik.touched.password && formik.errors.password && <div className="text-red-500">{formik.errors.password}</div>}
-                <button type='submit' className='bg-blue-400 text-white font-bold w-[300px] h-[35px] rounded'>Submit</button>
-                <h6>New to BabyHome ? <NavLink className='text-blue-400 mt-5' to={'/signup'}>Sign up</NavLink></h6>
-            </form>
+                <form className='login-form w-[500px] flex flex-col items-center space-y-5' onSubmit={formik.handleSubmit} >
+                    {error && <div className="text-red-500">{error}</div>}
+                    <label htmlFor="username" className='w-[300px] text text-left'>Username</label>
+                    <input  className='w-[300px] h-[35px] rounded ps-5 bg-blue-50 border-2 border-blue-200' name='username' type="text" value={formik.values.username} onChange={formik.handleChange} onBlur={formik.handleBlur} placeholder='Enter your Username'/>
+                    {formik.touched.username && formik.errors.username && <div className="text-red-500">{formik.errors.username}</div>}
+                    <label htmlFor="password" className='w-[300px] text-left'>Password</label>
+                    <input  className='w-[300px] h-[35px] rounded ps-5 bg-blue-50 border-2 border-blue-200' name='password' type={showPassword?"text":"password"} value={formik.values.password} onChange={formik.handleChange} onBlur={formik.handleBlur} placeholder='Enter Your Password'/>
+                    <div className='flex self-start ml-[20%] gap-x-2'>
+                        <input  className='w-4' id="show-password" type="checkbox" checked={showPassword} onChange={togglePasswordVisibility} />
+                        <label htmlFor="show-password" className=''>Show Password</label>
+                    </div>
+                    {formik.touched.password && formik.errors.password && <div className="text-red-500">{formik.errors.password}</div>}
+
+                    <button type='submit' className='bg-blue-400 text-white font-bold w-[300px] h-[35px] rounded'>Submit</button>
+                    <h6>New to BabyHome ? <NavLink className='text-blue-400 mt-5' to={'/signup'}>Sign up</NavLink></h6>
+                </form>
             </div>
         </div>
 </div>

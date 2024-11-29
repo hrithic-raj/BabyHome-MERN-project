@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, NavLink } from 'react-router-dom';
 import AuthNav from '../../components/AuthNav';
 import {useFormik} from 'formik';
@@ -19,7 +19,8 @@ function Signup() {
     const navigate=useNavigate()
     const dispatch = useDispatch()
     const { user, error } = useSelector((state)=>state.auth);
-    const userId = localStorage.getItem('userId')
+    const userId = localStorage.getItem('token')
+    const [showPassword, setShowPassword] = useState(false)
 
     const formik=useFormik({
       initialValues: {
@@ -34,6 +35,11 @@ function Signup() {
       }
 
     })
+    
+    const togglePasswordVisibility = () =>{
+      setShowPassword(prev=>!prev);
+    }
+
     useEffect(()=>{
       if(userId || user){
         navigate('/home')
@@ -58,10 +64,14 @@ function Signup() {
                 <input  className='w-[300px] h-[37px] rounded ps-5 bg-blue-50 border-2 border-blue-200' name='email' type="text" value={formik.values.email} onChange={formik.handleChange} onBlur={formik.handleBlur} placeholder='Enter your Username'/>
                 {formik.touched.email && formik.errors.email && <div className="text-red-500">{formik.errors.email}</div>}
                 <label htmlFor="password" className='w-[300px] text-left'>Password</label>
-                <input  className='w-[300px] h-[37px] rounded ps-5 bg-blue-50 border-2 border-blue-200' name='password' type="password" value={formik.values.password} onChange={formik.handleChange} onBlur={formik.handleBlur} placeholder='Enter Your Password'/>
+                <input  className='w-[300px] h-[37px] rounded ps-5 bg-blue-50 border-2 border-blue-200' name='password' type={showPassword?"text":"password"} value={formik.values.password} onChange={formik.handleChange} onBlur={formik.handleBlur} placeholder='Enter Your Password'/>
+                <div className='flex self-start ml-[20%] gap-x-2'>
+                    <input  className='w-4' id="show-password" type="checkbox" checked={showPassword} onChange={togglePasswordVisibility} />
+                    <label htmlFor="show-password" className=''>Show Password</label>
+                </div>
                 {formik.touched.password && formik.errors.password && <div className="text-red-500">{formik.errors.password}</div>}
                 <button type='submit' className='bg-blue-400 text-white font-bold w-[300px] h-[39px] rounded'>Submit</button>
-                <h6>Already have an account <NavLink className='text-blue-400 mt-5' to={'/login'}>Login</NavLink></h6>
+                <h6>Already have an account? <NavLink className='text-blue-400 mt-5' to={'/login'}>Login</NavLink></h6>
             </form>
             </div>
         </div>

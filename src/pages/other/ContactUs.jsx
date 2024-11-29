@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import MyNavbar from '../../components/MyNavbar';
 import MyFooter from '../../components/MyFooter';
+import { toast } from 'react-toastify';
 
 const ContactUs = () => {
   const [formData, setFormData] = useState({
@@ -18,7 +19,7 @@ const ContactUs = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     // Handle form submission logic here (e.g., send data to a backend or API)
-    alert('Thank you for reaching out! We will get back to you soon.');
+    toast.success("Thank you for reaching out! We will get back to you soon.",{position:'bottom-left'})
     setFormData({ name: '', email: '', message: '' }); // Reset form fields after submission
   };
 

@@ -6,7 +6,7 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
     (config) => {
-        const token = localStorage.getItem('token'); // Your user token
+        const token = localStorage.getItem('token');
         if (token) {
             config.headers.authorization = token;
         }
@@ -14,11 +14,5 @@ axiosInstance.interceptors.request.use(
     },
     (error) => Promise.reject(error)
 );
-
-// export const authorization = {
-//     headers: {
-//          'authorization': token
-//         }
-//     }
 
 export default axiosInstance;

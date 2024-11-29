@@ -108,6 +108,7 @@ function Product() {
               <button onClick={()=>setQuntity(prev=>prev+1)} className='text-2xl rounded w-10 h-10'>+</button>
             </div>
             <button className='text-xl mt-10 w-[300px] bg-pink-300 h-10 rounded' onClick={handleCart}>ADD TO CART</button>
+            <button className='text-xl mt-3 w-[300px] bg-red-200 h-10 rounded' onClick={handleWishlist}>ADD TO WISHLIST</button>
             {/* <button className='text-xl mt-3 w-[300px] bg-red-200 h-10 rounded'>BUY NOW</button> */}
           </div>
         </div>
