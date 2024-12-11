@@ -40,7 +40,7 @@ function AdminNavbar(props) {
           
           // Filter users based on searchTerm
           const searchUsers = userRes.filter(user =>
-            user.name.toLowerCase().includes(searchTerm.toLowerCase())
+            user.role==='user' && user.name.toLowerCase().includes(searchTerm.toLowerCase())
           );
           
           // Set the results

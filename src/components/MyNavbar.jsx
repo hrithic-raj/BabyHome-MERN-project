@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { FaShoppingCart, FaUser, FaDonate, FaBars, FaTimes ,FaSearch} from 'react-icons/fa';
+import { FaShoppingCart, FaUser, FaDonate, FaBars, FaTimes ,FaSearch, FaHeart} from 'react-icons/fa';
 import logo from '../Assets/logo.png'
 import {NavLink,useNavigate} from 'react-router-dom'
 import { AuthContext } from '../contexts/AuthContext';
@@ -123,6 +123,9 @@ function MyNavbar(props) {
         <div className="flex items-center space-x-6 me-3 relative transition-all ease-in-out">
           <button className="text-gray-600 hover:text-gray-400" onClick={()=>navigate('/donation')}>
             <FaDonate size={24} />
+          </button>
+          <button className="text-gray-600 hover:text-gray-400" onClick={()=>navigate('/wishlist')}>
+            <FaHeart size={24} />
           </button>
           <button className="text-gray-600 hover:text-gray-400 relative h-10"  onClick={()=>navigate('/cart')}>
           <FaShoppingCart size={24} />

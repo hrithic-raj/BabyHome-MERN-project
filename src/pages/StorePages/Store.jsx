@@ -10,7 +10,7 @@ function Store() {
   const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchParams, setSearchParams] = useSearchParams();
-  const limit = 8;
+  const limit = 4;
   useEffect(() => {
     const page = parseInt(searchParams.get('page')) || 1;
     setCurrentPage(page);
@@ -31,7 +31,7 @@ function Store() {
       .catch(err=>console.error("Error while fetching products", err))
     }
   }, [category, searchParams]);
-  
+
   if (!products) {
     return <div>Loading...</div>;
   }

@@ -116,7 +116,7 @@ function Dashboard() {
                         <span className='text-lg font-semibold'>STOCK</span>
                   </div>
                   <div className='h-[430px] overflow-auto custom-scrollbar'>
-                    {products.map(product=>(
+                    {products && products.length>0 && products.map(product=>(
                       <div key={product.id} className='grid grid-cols-4 justify-items-center items-center mb-3'>
                         <img className='w-[70px]' src={product.images[0]} alt="" />
                         <span>{product.name}</span>
